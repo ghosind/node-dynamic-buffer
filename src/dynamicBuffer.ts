@@ -1,25 +1,66 @@
 import { constants } from 'buffer';
 
 export interface DynamicBufferOptions {
+  /**
+   * The initial size of the buffer, default 256.
+   */
   size?: number;
 
+  /**
+   * A value to pre-fill the new buffer with, default 0.
+   */
   fill?: string | Buffer | number;
 
+  /**
+   * Character encoding for `fill` if `fill` is a string, default 'utf8'.
+   */
   encoding?: BufferEncoding;
 }
 
+/**
+ * The `DynamicBuffer` class is a type for dealing with binary data directly, and it'll handle
+ * storage size automatically.
+ * 
+ * ```js
+ * const buf = new DynamicBuffer();
+ * 
+ * console.log(buf.append("hello world"));
+ * // 11
+ * 
+ * console.log(buf.toString());
+ * // Hello world
+ * ```
+ */
 export class DynamicBuffer {
+  /**
+   * The default size of the buffer, if `size` in the options is not specified.
+   */
+  private readonly DefaultInitialSize: number = 1 << 8;
+
+  /**
+   * Internal buffer to stores data.
+   */
   private buffer: Buffer;
 
+  /**
+   * The number of bytes that used in the buffer.
+   */
   private used: number;
 
+  /**
+   * The current size of the buffer.
+   */
   private size: number;
 
+  /**
+   * A value to pre-fill the new buffer with.
+   */
   private fill?: string | Buffer | number;
 
+  /**
+   * Character encoding for `fill` if `fill` is a string.
+   */
   private encoding?: BufferEncoding;
-
-  private readonly DefaultInitialSize: number = 1 << 8;
 
   constructor(options?: DynamicBufferOptions) {
     this.size = options?.size || this.DefaultInitialSize;
@@ -36,6 +77,7 @@ export class DynamicBuffer {
 
   /**
    * Appends string to this buffer according to the character encoding.
+   * 
    * @param data String to write to buffer.
    * @param encoding The character encoding to use, default from buffer encoding.
    * @param length Maximum number of bytes to write, default the length of string.
@@ -61,12 +103,18 @@ export class DynamicBuffer {
     return count;
   }
 
+  /**
+   * Copies the buffer data onto a new `Buffer` instance without unused parts.
+   * 
+   * @returns The new buffer contains the written data in this buffer.
+   */
   toBuffer() {
     return Buffer.from(this.buffer, 0, this.used);
   }
 
   /**
    * Decodes buffer to a string with the specified character encoding and range.
+   * 
    * @param encoding The character encoding to use, default from buffer encoding.
    * @param start The byte offset to start decoding at, default 0.
    * @param end The byte offset to stop decoding at (not inclusive), default used bytes offset.
