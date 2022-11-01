@@ -34,13 +34,31 @@ export class DynamicBuffer {
     this.buffer = Buffer.alloc(this.size, this.fill, this.encoding);
   }
 
-  append(data: string, encoding?: BufferEncoding) {
-    if (data.length + this.used > this.size) {
+  /**
+   * Appends string to this buffer according to the character encoding.
+   * @param data String to write to buffer.
+   * @param encoding The character encoding to use, default from buffer encoding.
+   * @param length Maximum number of bytes to write, default the length of string.
+   * @returns The number of bytes written.
+   */
+  append(data: string, encoding?: BufferEncoding, length?: number) {
+    let lengthToWrite = data?.length || 0;
+    if (length !== undefined && length >= 0 && length <= data.length) {
+      lengthToWrite = length;
+    }
+
+    if (lengthToWrite === 0) {
+      return 0;
+    }
+
+    if (lengthToWrite + this.used > this.size) {
       this.resize();
     }
 
-    this.used = this.buffer.write(data, this.used, encoding || this.encoding);
-    return this.used;
+    const count = this.buffer.write(data, this.used, lengthToWrite, encoding || this.encoding);
+    this.used += count;
+
+    return count;
   }
 
   toBuffer() {
