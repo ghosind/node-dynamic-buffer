@@ -106,14 +106,21 @@ export class DynamicBuffer {
   /**
    * Copies the buffer data onto a new `Buffer` instance without unused parts.
    *
+   * @param start The byte offset to start coping at, default 0.
+   * @param end The byte offset to stop coping at (not inclusive), default used bytes offset.
    * @returns The new buffer contains the written data in this buffer.
    */
-  toBuffer() {
+  toBuffer(start?: number, end?: number) {
     if (!this.buffer || this.used === 0) {
       return Buffer.alloc(0);
     }
 
-    return Buffer.from(this.buffer, 0, this.used);
+    const { startOffset, endOffset } = this.calculateOffsets(start, end) ;
+    if (endOffset - startOffset === 0) {
+      return Buffer.alloc(0);
+    }
+
+    return Buffer.from(this.buffer, startOffset, endOffset);
   }
 
   /**
@@ -129,16 +136,9 @@ export class DynamicBuffer {
       return '';
     }
 
-    let startOffset = start;
-    let endOffset = end;
-
-    if (!startOffset || startOffset < 0) {
-      startOffset = 0;
-    } else if (startOffset > this.used) {
-      startOffset = this.used;
-    }
-    if (endOffset === undefined || endOffset > this.used) {
-      endOffset = this.used;
+    const { startOffset, endOffset } = this.calculateOffsets(start, end) ;
+    if (endOffset - startOffset === 0) {
+      return '';
     }
 
     return this.buffer.toString(encoding || this.encoding, startOffset, endOffset);
@@ -184,5 +184,32 @@ export class DynamicBuffer {
     }
 
     this.buffer = newBuffer;
+  }
+
+  /**
+   * Calculate start and end offsets by optional parameters.
+   *
+   * @param start The start byte offset, default 0.
+   * @param end The end byte offset, default used bytes offset.
+   * @returns The start and end byte offsets.
+   */
+  private calculateOffsets(start?: number, end?: number) {
+    let startOffset = start;
+    let endOffset = end;
+
+    if (!startOffset || startOffset < 0) {
+      startOffset = 0;
+    } else if (startOffset > this.used) {
+      startOffset = this.used;
+    }
+
+    if (endOffset === undefined || endOffset > this.used) {
+      endOffset = this.used;
+    }
+
+    return {
+      startOffset,
+      endOffset,
+    }
   }
 }
