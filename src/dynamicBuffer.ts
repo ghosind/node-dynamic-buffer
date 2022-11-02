@@ -2,7 +2,7 @@ import { constants } from 'buffer';
 
 export interface DynamicBufferOptions {
   /**
-   * The initial size of the buffer, default 256.
+   * The initial size of the buffer, default 16.
    */
   size?: number;
 
@@ -20,13 +20,13 @@ export interface DynamicBufferOptions {
 /**
  * The `DynamicBuffer` class is a type for dealing with binary data directly, and it'll handle
  * storage size automatically.
- * 
+ *
  * ```js
  * const buf = new DynamicBuffer();
- * 
+ *
  * console.log(buf.append("hello world"));
  * // 11
- * 
+ *
  * console.log(buf.toString());
  * // Hello world
  * ```
@@ -35,12 +35,12 @@ export class DynamicBuffer {
   /**
    * The default size of the buffer, if `size` in the options is not specified.
    */
-  private readonly DefaultInitialSize: number = 1 << 8;
+  private readonly DefaultInitialSize: number = 16;
 
   /**
    * Internal buffer to stores data.
    */
-  private buffer: Buffer;
+  private buffer?: Buffer;
 
   /**
    * The number of bytes that used in the buffer.
@@ -64,7 +64,7 @@ export class DynamicBuffer {
 
   constructor(options?: DynamicBufferOptions) {
     this.size = options?.size || this.DefaultInitialSize;
-    if (this.size <= 0 || this.size > constants.MAX_LENGTH) {
+    if (this.size < 0 || this.size > constants.MAX_LENGTH) {
       throw new Error('Invalid buffer size');
     }
 
@@ -72,12 +72,14 @@ export class DynamicBuffer {
     this.fill = options?.fill || 0;
     this.encoding = options?.encoding || 'utf8';
 
-    this.buffer = Buffer.alloc(this.size, this.fill, this.encoding);
+    if (this.size > 0) {
+      this.buffer = Buffer.alloc(this.size, this.fill, this.encoding);
+    }
   }
 
   /**
    * Appends string to this buffer according to the character encoding.
-   * 
+   *
    * @param data String to write to buffer.
    * @param encoding The character encoding to use, default from buffer encoding.
    * @param length Maximum number of bytes to write, default the length of string.
@@ -93,34 +95,40 @@ export class DynamicBuffer {
       return 0;
     }
 
-    if (lengthToWrite + this.used > this.size) {
-      this.resize();
-    }
+    this.ensureSize(lengthToWrite + this.used);
 
-    const count = this.buffer.write(data, this.used, lengthToWrite, encoding || this.encoding);
-    this.used += count;
+    const count = this.buffer?.write(data, this.used, lengthToWrite, encoding || this.encoding);
+    this.used += count || 0;
 
     return count;
   }
 
   /**
    * Copies the buffer data onto a new `Buffer` instance without unused parts.
-   * 
+   *
    * @returns The new buffer contains the written data in this buffer.
    */
   toBuffer() {
+    if (!this.buffer || this.used === 0) {
+      return Buffer.alloc(0);
+    }
+
     return Buffer.from(this.buffer, 0, this.used);
   }
 
   /**
    * Decodes buffer to a string with the specified character encoding and range.
-   * 
+   *
    * @param encoding The character encoding to use, default from buffer encoding.
    * @param start The byte offset to start decoding at, default 0.
    * @param end The byte offset to stop decoding at (not inclusive), default used bytes offset.
    * @returns The string decodes from buffer with the specified range.
    */
   toString(encoding?: BufferEncoding, start?: number, end?: number) {
+    if (!this.buffer || this.used === 0) {
+      return '';
+    }
+
     let startOffset = start;
     let endOffset = end;
 
@@ -136,9 +144,44 @@ export class DynamicBuffer {
     return this.buffer.toString(encoding || this.encoding, startOffset, endOffset);
   }
 
-  private resize() {
-    const newBuffer = Buffer.alloc(this.size * 2, this.fill, this.encoding);
-    this.buffer.copy(newBuffer, 0, 0, this.used);
+  /**
+   * Ensures the buffer size is at least equal to the expect size.
+   *
+   * @param expectSize The number of bytes that minimum size is expected.
+   */
+  private ensureSize(expectSize: number) {
+    if (this.used <= expectSize) {
+      return;
+    }
+
+    if (expectSize > constants.MAX_LENGTH) {
+      throw new Error('Buffer size is overflow');
+    }
+
+    let newSize = this.used * 2;
+    while (newSize < expectSize) {
+      newSize *= 2;
+    }
+
+    if (newSize > constants.MAX_LENGTH) {
+      newSize = constants.MAX_LENGTH;
+    }
+
+    this.resize(newSize);
+  }
+
+  /**
+   * Allocates a new buffer with the new size, and copies data from the old buffer to the new
+   * buffer if the old buffer is not empty.
+   *
+   * @param newSize
+   */
+  private resize(newSize: number) {
+    const newBuffer = Buffer.alloc(newSize, this.fill, this.encoding);
+
+    if (this.buffer && this.used > 0) {
+      this.buffer.copy(newBuffer, 0, this.used);
+    }
 
     this.buffer = newBuffer;
   }
