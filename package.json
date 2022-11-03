@@ -24,6 +24,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.0",
     "@types/node": "^18.11.8",
+    "codecov": "^3.8.3",
     "mocha": "^10.1.0",
     "nyc": "^15.1.0",
     "ts-node": "^10.9.1",
