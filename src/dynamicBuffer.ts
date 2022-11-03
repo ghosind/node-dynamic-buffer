@@ -63,7 +63,12 @@ export class DynamicBuffer {
   private encoding?: BufferEncoding;
 
   constructor(options?: DynamicBufferOptions) {
-    this.size = options?.size || this.DefaultInitialSize;
+    if (options?.size !== undefined) {
+      this.size = options.size;
+    } else {
+      this.size = this.DefaultInitialSize;
+    }
+
     if (this.size < 0 || this.size > constants.MAX_LENGTH) {
       throw new Error('Invalid buffer size');
     }
@@ -120,7 +125,10 @@ export class DynamicBuffer {
       return Buffer.alloc(0);
     }
 
-    return Buffer.from(this.buffer, startOffset, endOffset);
+    const newBuffer = Buffer.alloc(endOffset - startOffset, this.fill, this.encoding);
+    this.buffer.copy(newBuffer, 0, startOffset, endOffset);
+
+    return newBuffer;
   }
 
   /**
@@ -150,7 +158,7 @@ export class DynamicBuffer {
    * @param expectSize The number of bytes that minimum size is expected.
    */
   private ensureSize(expectSize: number) {
-    if (this.used <= expectSize) {
+    if (this.size >= expectSize) {
       return;
     }
 
@@ -158,7 +166,7 @@ export class DynamicBuffer {
       throw new Error('Buffer size is overflow');
     }
 
-    let newSize = this.used * 2;
+    let newSize = this.size ? this.size * 2 : expectSize;
     while (newSize < expectSize) {
       newSize *= 2;
     }
@@ -180,10 +188,11 @@ export class DynamicBuffer {
     const newBuffer = Buffer.alloc(newSize, this.fill, this.encoding);
 
     if (this.buffer && this.used > 0) {
-      this.buffer.copy(newBuffer, 0, this.used);
+      this.buffer.copy(newBuffer, 0, 0, this.used);
     }
 
     this.buffer = newBuffer;
+    this.size = newSize;
   }
 
   /**
