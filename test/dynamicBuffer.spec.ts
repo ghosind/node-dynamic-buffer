@@ -27,9 +27,7 @@ describe('Initialization tests', () => {
   });
 
   it('Test initializing with a size large than buffer.constants.MAX_LENGTH', () => {
-    assert.throws(() => {
-      const buffer = new DynamicBuffer({ size: constants.MAX_LENGTH + 1 });
-    });
+    assert.throws(() => new DynamicBuffer({ size: constants.MAX_LENGTH + 1 }));
   });
 });
 
@@ -71,7 +69,7 @@ describe('Append tests', () => {
 
     assert.throws(() => {
       // @ts-ignore
-      const count = buffer.append();
+      buffer.append();
     });
   });
 
@@ -80,7 +78,7 @@ describe('Append tests', () => {
 
     assert.throws(() => {
       // @ts-ignore
-      const count = buffer.append(null);
+      buffer.append(null);
     });
   });
 
@@ -89,7 +87,7 @@ describe('Append tests', () => {
 
     assert.throws(() => {
       // @ts-ignore
-      const count = buffer.append(65);
+      buffer.append(65);
     });
   });
 

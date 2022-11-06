@@ -1,5 +1,8 @@
 import { constants } from 'buffer';
 
+type BufferEncoding = 'ascii' | 'utf8' | 'utf-8' | 'utf16le' | 'ucs2' | 'ucs-2'
+  | 'base64' | 'base64url' | 'latin1' | 'binary' | 'hex';
+
 export interface DynamicBufferOptions {
   /**
    * The initial size of the buffer, default 16.
@@ -124,7 +127,7 @@ export class DynamicBuffer {
       return Buffer.alloc(0);
     }
 
-    const { startOffset, endOffset } = this.calculateOffsets(start, end) ;
+    const { startOffset, endOffset } = this.calculateOffsets(start, end);
     if (endOffset - startOffset === 0) {
       return Buffer.alloc(0);
     }
@@ -148,7 +151,7 @@ export class DynamicBuffer {
       return '';
     }
 
-    const { startOffset, endOffset } = this.calculateOffsets(start, end) ;
+    const { startOffset, endOffset } = this.calculateOffsets(start, end);
     if (endOffset - startOffset === 0) {
       return '';
     }
@@ -223,6 +226,6 @@ export class DynamicBuffer {
     return {
       startOffset,
       endOffset,
-    }
+    };
   }
 }
