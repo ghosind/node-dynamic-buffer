@@ -69,21 +69,28 @@ describe('Append tests', () => {
   it('Test appending without parameter', () => {
     const buffer = new DynamicBuffer();
 
-    // @ts-ignore
-    const count = buffer.append();
-
-    assert.equal(count, 0);
-    assert.equal(buffer.toString(), '');
+    assert.throws(() => {
+      // @ts-ignore
+      const count = buffer.append();
+    });
   });
 
   it('Test appending null', () => {
     const buffer = new DynamicBuffer();
 
-    // @ts-ignore
-    const count = buffer.append(null);
+    assert.throws(() => {
+      // @ts-ignore
+      const count = buffer.append(null);
+    });
+  });
 
-    assert.equal(count, 0);
-    assert.equal(buffer.toString(), '');
+  it('Test appending a number', () => {
+    const buffer = new DynamicBuffer();
+
+    assert.throws(() => {
+      // @ts-ignore
+      const count = buffer.append(65);
+    });
   });
 
   it('Test appending string with small length', () => {

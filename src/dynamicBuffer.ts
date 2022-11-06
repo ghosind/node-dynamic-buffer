@@ -91,6 +91,10 @@ export class DynamicBuffer {
    * @returns The number of bytes written.
    */
   append(data: string, encoding?: BufferEncoding, length?: number) {
+    if (typeof data !== 'string') {
+      throw new TypeError('argument must be a string');
+    }
+
     let lengthToWrite = data?.length || 0;
     if (length !== undefined && length >= 0 && length <= data.length) {
       lengthToWrite = length;
