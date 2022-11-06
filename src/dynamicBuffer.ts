@@ -186,7 +186,7 @@ export class DynamicBuffer {
    * Allocates a new buffer with the new size, and copies data from the old buffer to the new
    * buffer if the old buffer is not empty.
    *
-   * @param newSize
+   * @param newSize The size of new buffer.
    */
   private resize(newSize: number) {
     const newBuffer = Buffer.alloc(newSize, this.fill, this.encoding);
