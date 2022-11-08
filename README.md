@@ -61,11 +61,11 @@ yarn add dynamic-buffer
   - `options.fill`: Pre-fill value to the buffer, default 0.
   - `options.encoding`: Character encoding for pre-fill value if it's a string, default `'utf8'`.
 
-- `append(data: string, encoding?: BufferEncoding, length?: number)`: Appends data into buffer.
+- `append(data: string, length?: number, encoding?: BufferEncoding)`: Appends data into buffer.
 
   - `data`: String to write into this buffer.
-  - `encoding`: Character encoding of this string.
   - `length`: The number of bytes to write.
+  - `encoding`: Character encoding of this string.
 
 - `toBuffer(start?: number, end?: number)`: Exports data to a new builtin buffer object.
 

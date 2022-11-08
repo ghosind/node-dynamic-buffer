@@ -20,7 +20,9 @@
                 ".js": "never",
                 ".tx": "never"
             }
-        ]
+        ],
+        "no-dupe-class-members": "off",
+        "no-unused-vars": "off"
     },
     "settings": {
         "import/resolver": {
