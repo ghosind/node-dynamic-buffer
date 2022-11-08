@@ -86,6 +86,13 @@ export class DynamicBuffer {
   }
 
   /**
+   * Returns the number of the used bytes in this buffer.
+   */
+  get length() {
+    return this.used;
+  }
+
+  /**
    * Appends string to this buffer according to the character encoding.
    *
    * @param data String to write to buffer.

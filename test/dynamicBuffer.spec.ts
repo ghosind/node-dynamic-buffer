@@ -10,6 +10,7 @@ describe('Initialization tests', () => {
 
     assert.equal(Reflect.get(buffer, 'size'), Reflect.get(buffer, 'DefaultInitialSize'));
     assert.notEqual(Reflect.get(buffer, 'buffer'), undefined);
+    assert.equal(buffer.length, 0);
   });
 
   it('Test initializing with zero size', () => {
@@ -53,6 +54,7 @@ describe('Append tests', () => {
     count = buffer.append(str);
     assert.equal(count, str.length);
     assert.equal(buffer.toString(), 'Hello world');
+    assert.equal(buffer.length, 'Hello world'.length);
   });
 
   it('Test appending empty string', () => {

@@ -32,7 +32,7 @@ yarn add dynamic-buffer
 2. Creates `DynamicBuffer` instance with default initial size or the specific size:
 
   ```ts
-  const buffer = new DynamicBuffer({ size: 12 });
+  const buffer = new DynamicBuffer();
   ```
 
 3. Appends data into buffer:
@@ -42,9 +42,11 @@ yarn add dynamic-buffer
   buffer.append('world!');
   ```
 
-4. Exports data to string or builtin buffer object:
+4. Exports data to string or builtin buffer object without unused bytes:
 
   ```ts
+  console.log(buffer.length);
+  // 12
   const buf = buffer.toBuffer();
   console.log(buf.toString());
   // Hello world!
