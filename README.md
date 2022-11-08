@@ -79,3 +79,5 @@ yarn add dynamic-buffer
   - `encoding`: The character encoding for output string.
   - `start`: The start byte offset.
   - `end`: The end byte offset.
+
+- `toJSON()`: Exports data to a JSON representation.

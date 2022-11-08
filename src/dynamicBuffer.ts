@@ -197,6 +197,36 @@ export class DynamicBuffer {
   }
 
   /**
+   * Returns a JSON representation of this buffer.
+   *
+   * ```js
+   * const buf = new DynamicBuffer();
+   * buf.append("Hello");
+   * console.log(JSON.stringify(buf));
+   * // {"type":"Buffer","data":[72,101,108,108,111]}
+   * ```
+   */
+  toJSON() {
+    const data: number[] = [];
+
+    if (this.buffer && this.used > 0) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const pair of this.buffer.entries()) {
+        if (pair[0] >= this.used) {
+          break;
+        }
+
+        data.push(pair[1]);
+      }
+    }
+
+    return {
+      type: 'Buffer',
+      data,
+    };
+  }
+
+  /**
    * Ensures the buffer size is at least equal to the expect size.
    *
    * @param expectSize The number of bytes that minimum size is expected.

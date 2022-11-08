@@ -213,6 +213,29 @@ describe('Export string tests', () => {
   });
 });
 
+describe('Exports to JSON object', () => {
+  it('Test toJSON() without writes data', () => {
+    const buffer = new DynamicBuffer();
+
+    const buf = buffer.toJSON();
+
+    assert.equal(buf.type, 'Buffer');
+    assert.deepEqual(buf.data, []);
+    assert.equal(JSON.stringify(buf), '{"type":"Buffer","data":[]}');
+  });
+
+  it('Test toJSON() with data', () => {
+    const buffer = new DynamicBuffer();
+
+    buffer.append('Hello');
+    const buf = buffer.toJSON();
+
+    assert.equal(buf.type, 'Buffer');
+    assert.deepEqual(buf.data, [72, 101, 108, 108, 111]);
+    assert.equal(JSON.stringify(buf), '{"type":"Buffer","data":[72,101,108,108,111]}');
+  });
+});
+
 describe('Resize tests', () => {
   it('Test resize()', () => {
     const buffer = new DynamicBuffer();
