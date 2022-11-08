@@ -128,7 +128,7 @@ export class DynamicBuffer {
       length = encodingParam;
     }
 
-    let lengthToWrite = data?.length || 0;
+    let lengthToWrite = data.length || 0;
     if (length !== undefined && length >= 0 && length <= data.length) {
       lengthToWrite = length;
     }
