@@ -1,6 +1,7 @@
 # Dynamic Buffer for Node.js
 
 [![Latest version](https://img.shields.io/github/v/release/ghosind/node-dynamic-buffer?include_prereleases)](https://github.com/ghosind/node-dynamic-buffer)
+[![NPM Package](https://img.shields.io/npm/v/dynamic-buffer)](https://www.npmjs.com/package/dynamic-buffer)
 [![Github Actions build](https://img.shields.io/github/workflow/status/ghosind/node-dynamic-buffer/Test)](https://github.com/ghosind/node-dynamic-buffer)
 [![codecov](https://codecov.io/gh/ghosind/node-dynamic-buffer/branch/main/graph/badge.svg)](https://codecov.io/gh/ghosind/node-dynamic-buffer)
 [![License](https://img.shields.io/github/license/ghosind/node-dynamic-buffer)](https://github.com/ghosind/node-dynamic-buffer)
@@ -55,29 +56,146 @@ yarn add dynamic-buffer
   // Hello world!
   ```
 
+## Table of Contents
+
+- [Installation](#installation)
+
+- [Getting Started](#getting-started)
+
+- [Usages](#usages)
+
+  - [Write Data](#write-data)
+
+  - [Iteration](#iteration)
+
+  - [Export Data](#export-data)
+
+- [APIs](#apis)
+
+- [Run Tests](#run-tests)
+
+- [License](#license)
+
+## Usages
+
+### Write Data
+
+You can write a string into a buffer by `append` method, it'll add the string to the end of the buffer:
+
+```ts
+buf.append('Hello');
+buf.append(' ');
+buf.append('world');
+console.log(buf.toString());
+// Hello world
+```
+
+And you can also set the string length to write. Like the second line of the following example, it'll write `'Script!'` into buffer and without the last two `'!'` symbols:
+
+```ts
+buf.append('Java');
+buf.append('Script!!!', 7);
+console.log(buf.toString());
+// JavaScript!
+```
+
+### Iteration
+
+`DynamicBuffer` provides three ways to iterate data from the specified buffer, you can use them with `for...of` statement.
+
+- `entries()` returns an iterator of key-value pair (index and byte) from the buffer.
+
+  ```ts
+  buf.append('Hello');
+  for (const pair of buf.entries()) {
+    console.log(pair);
+  }
+  // [ 0, 72 ]
+  // [ 1, 101 ]
+  // [ 2, 108 ]
+  // [ 3, 108 ]
+  // [ 4, 111 ]
+  ```
+
+- `values()` returns an iterator of data(byte) from the buffer.
+
+  ```ts
+  buf.append('Hello');
+  for (const value of buf.values()) {
+    console.log(value);
+  }
+  // 72
+  // 101
+  // 108
+  // 108
+  // 111
+  ```
+
+- `keys()` returns an iterator of buffer keys (indices).
+
+### Export Data
+
+You can export buffer content (without unused parts) to string, `Buffer` object, or JSON representation object.
+
+```ts
+buf.append('Hello');
+console.log(buf.toString());
+// Hello
+const dataBuffer = buf.toBuffer();
+console.log(buf.length, dataBuffer.toString());
+// 5 Hello
+console.log(JSON.stringify(buf)); // JSON.stringify implicitly calls toJSON method.
+// {"type":"Buffer","data":[72,101,108,108,111]}
+```
+
+For `toString` and `toBuffer` methods, you can also set the start and end offsets to export the subset of written data.
+
+```ts
+buf.append('Hello world!!!');
+console.log(buf.toString('utf8', 6, 11));
+// world
+```
+
 ## APIs
 
-- `DynamicBuffer(options?: DynamicBufferOptions)`: Constructor of `DynamicBuffer` class.
+- `append(data: string, length?: number, encoding?: BufferEncoding): number`
 
-  - `options.size`: Initial buffer size, default 16.
-  - `options.fill`: Pre-fill value to the buffer, default 0.
-  - `options.encoding`: Character encoding for pre-fill value if it's a string, default `'utf8'`.
+  Append string into buffer.
 
-- `append(data: string, length?: number, encoding?: BufferEncoding)`: Appends data into buffer.
+- `entries(): IterableIterator<[number, number]>`
 
-  - `data`: String to write into this buffer.
-  - `length`: The number of bytes to write.
-  - `encoding`: Character encoding of this string.
+  Get an iterator of index-byte pairs from the buffer.
 
-- `toBuffer(start?: number, end?: number)`: Exports data to a new builtin buffer object.
+- `keys(): IterableIterator<number>`
 
-  - `start`: The start byte offset.
-  - `end`: The end byte offset.
+  Get an iterator of indices in the buffer.
 
-- `toString(encoding?: BufferEncoding, start?: number, end?: number)`: Exports data to a string.
+- `values(): IterableIterator<number>`
 
-  - `encoding`: The character encoding for output string.
-  - `start`: The start byte offset.
-  - `end`: The end byte offset.
+  Get an iterator of data in the buffer.
 
-- `toJSON()`: Exports data to a JSON representation.
+- `toString(encoding?: BufferEncoding, start?: number, end?: number): string`
+
+  Decode buffer to a string.
+
+- `toBuffer(start?: number, end?: number): Buffer`
+
+  Return a new builtin Buffer object.
+
+- `toJSON(): { type: string, data: number[] }`
+
+  Return a JSON representation object.
+
+## Run Tests
+
+All of test cases are written with `mocha`, `assert`, and `nyc`. They can be run with the following commands:
+
+```sh
+npm test
+# or
+yarn test
+```
+
+## License
+
+This project was published under MIT license, you can see more detail in [LICENSE file](./LICENSE).
