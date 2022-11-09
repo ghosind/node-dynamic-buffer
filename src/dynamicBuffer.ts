@@ -1,5 +1,7 @@
 import { constants } from 'buffer';
 
+import { DynamicBufferIterator } from './iterator';
+
 type BufferEncoding = 'ascii' | 'utf8' | 'utf-8' | 'utf16le' | 'ucs2' | 'ucs-2'
   | 'base64' | 'base64url' | 'latin1' | 'binary' | 'hex';
 
@@ -224,6 +226,123 @@ export class DynamicBuffer {
       type: 'Buffer',
       data,
     };
+  }
+
+  /**
+   * Creates and returns an iterator of key(index) and value(byte) pairs from this buffer.
+   *
+   * ```js
+   * buf.append('Hello');
+   *
+   * for (const pair of buf.entries()) {
+   *   console.log(pair);
+   * }
+   * // [0, 72]
+   * // [1, 101]
+   * // [2, 108]
+   * // [3, 108]
+   * // [4, 111]
+   *
+   * @returns Iterator of index and byte pairs from this buffer.
+   * ```
+   */
+  entries(): IterableIterator<[number, number]> {
+    return new class extends DynamicBufferIterator<[number, number]> {
+      next(): IteratorResult<[number, number], any> {
+        if (!this.buf.buffer || this.buf.used === this.index) {
+          return {
+            done: true,
+            value: undefined,
+          };
+        }
+
+        const i = this.index;
+        const value = this.buf.buffer[this.index];
+        this.index += 1;
+
+        return {
+          done: false,
+          value: [i, value],
+        };
+      }
+    }(this);
+  }
+
+  /**
+   * Creates and returns an iterator for keys(indices) in this buffer.
+   *
+   * ```js
+   * buf.append('Hello');
+   *
+   * for (const key of buf.keys()) {
+   *   console.log(key);
+   * }
+   * // 0
+   * // 1
+   * // 2
+   * // 3
+   * // 4
+   *
+   * @returns Iterator of buffer keys.
+   * ```
+   */
+  keys(): IterableIterator<number> {
+    return new class extends DynamicBufferIterator<number> {
+      next(): IteratorResult<number, any> {
+        if (!this.buf.buffer || this.buf.used === this.index) {
+          return {
+            done: true,
+            value: undefined,
+          };
+        }
+
+        const value = this.index;
+        this.index += 1;
+
+        return {
+          done: false,
+          value,
+        };
+      }
+    }(this);
+  }
+
+  /**
+   * Creates and returns an iterator for values(bytes) in this buffer.
+   *
+   * ```js
+   * buf.append('Hello');
+   * for (const value of buf.values()) {
+   *   console.log(value);
+   * }
+   * // 72
+   * // 101
+   * // 108
+   * // 108
+   * // 111
+   *
+   * @returns Iterator of buffer values.
+   * ```
+   */
+  values(): IterableIterator<number> {
+    return new class extends DynamicBufferIterator<number> {
+      next(): IteratorResult<number, any> {
+        if (!this.buf.buffer || this.buf.used === this.index) {
+          return {
+            done: true,
+            value: undefined,
+          };
+        }
+
+        const value = this.buf.buffer[this.index];
+        this.index += 1;
+
+        return {
+          done: false,
+          value,
+        };
+      }
+    }(this);
   }
 
   /**
