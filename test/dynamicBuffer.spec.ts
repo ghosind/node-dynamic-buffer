@@ -134,6 +134,120 @@ describe('Append tests', () => {
   });
 });
 
+describe('Write tests', () => {
+  it('Test writing string without offset', () => {
+    const buffer = new DynamicBuffer();
+    const str = 'Hello world';
+
+    const count = buffer.write(str);
+
+    assert.equal(count, str.length);
+    assert.equal(buffer.toString(), str);
+  });
+
+  it('Test writing string with offset', () => {
+    const buffer = new DynamicBuffer({ fill: ' ' });
+    const str = 'Hello world';
+
+    const count = buffer.write(str, 5);
+
+    assert.equal(count, str.length);
+    assert.equal(buffer.toString(), `     ${str}`);
+  });
+
+  it('Test writing string with negative offset', () => {
+    const buffer = new DynamicBuffer();
+    const str = 'Hello world';
+
+    assert.throws(() => {
+      buffer.write(str, -1);
+    });
+  });
+
+  it('Test writing string with large offset', () => {
+    const buffer = new DynamicBuffer({ fill: ' ' });
+    const str = 'Hello world';
+
+    assert.throws(() => {
+      buffer.write(str, constants.MAX_LENGTH * 2);
+    });
+  });
+
+  it('Test writing string without offset twice time', () => {
+    const buffer = new DynamicBuffer();
+    let str = 'Hello';
+    let count = buffer.write(str);
+    assert.equal(count, str.length);
+    assert.equal(buffer.toString(), str);
+
+    str = 'world';
+    count = buffer.write(str);
+    assert.equal(count, str.length);
+    assert.equal(buffer.toString(), str);
+    assert.equal(buffer.length, str.length);
+  });
+
+  it('Test writing string with offset twice time', () => {
+    const buffer = new DynamicBuffer();
+    let str = 'Hello!';
+    let count = buffer.write(str);
+    assert.equal(count, str.length);
+    assert.equal(buffer.toString(), str);
+
+    str = ' world!';
+    count = buffer.write(str, 5);
+    assert.equal(count, str.length);
+    assert.equal(buffer.toString(), 'Hello world!');
+    assert.equal(buffer.length, 12);
+  });
+
+  it('Test writing empty string without offset', () => {
+    const buffer = new DynamicBuffer();
+
+    const count = buffer.write('');
+
+    assert.equal(count, 0);
+    assert.equal(buffer.toString(), '');
+  });
+
+  it('Test writing string with parameters', () => {
+    const buffer = new DynamicBuffer();
+    const str = 'Hello world!!!';
+
+    const count = buffer.write(str, 0, 12, 'utf-8');
+
+    assert.equal(count, 12);
+    assert.equal(buffer.toString(), 'Hello world!');
+  });
+
+  it('Test writing without parameter', () => {
+    const buffer = new DynamicBuffer();
+
+    assert.throws(() => {
+      // @ts-ignore
+      buffer.write();
+    });
+  });
+
+  it('Test writing null', () => {
+    const buffer = new DynamicBuffer();
+
+    assert.throws(() => {
+      // @ts-ignore
+      buffer.write(null);
+    });
+  });
+
+  it('Test writing a number', () => {
+    const buffer = new DynamicBuffer();
+
+    assert.throws(() => {
+      // @ts-ignore
+      buffer.write(65);
+    });
+  });
+});
+
 describe('Export buffer tests', () => {
   it('Test toBuffer() before appending', () => {
     const buffer = new DynamicBuffer();
