@@ -2,6 +2,9 @@ import { constants } from 'buffer';
 
 import { DynamicBufferIterator } from './iterator';
 
+/**
+ * The character encoding that is supported by Node.js, copy from Node.js Buffer module.
+ */
 type BufferEncoding = 'ascii' | 'utf8' | 'utf-8' | 'utf16le' | 'ucs2' | 'ucs-2'
   | 'base64' | 'base64url' | 'latin1' | 'binary' | 'hex';
 
@@ -89,6 +92,12 @@ export class DynamicBuffer {
 
   /**
    * Returns the number of the used bytes in this buffer.
+   *
+   * ```js
+   * buf.append('Hello');
+   * console.log(buf.length);
+   * // 5
+   * ```
    */
   get length() {
     return this.used;
@@ -179,6 +188,12 @@ export class DynamicBuffer {
   /**
    * Copies the buffer data onto a new `Buffer` instance without unused parts.
    *
+   * ```js
+   * buf.append('Hello');
+   * console.log(buf.toBuffer());
+   * // <Buffer 48 65 6c 6c 6f>
+   * ```
+   *
    * @param start The byte offset to start coping at, default 0.
    * @param end The byte offset to stop coping at (not inclusive), default used bytes offset.
    * @returns The new buffer contains the written data in this buffer.
@@ -201,6 +216,12 @@ export class DynamicBuffer {
 
   /**
    * Decodes buffer to a string with the specified character encoding and range.
+   *
+   * ```js
+   * buf.append('Hello');
+   * console.log(buf.toString());
+   * // Hello
+   * ```
    *
    * @param encoding The character encoding to use, default from buffer encoding.
    * @param start The byte offset to start decoding at, default 0.
