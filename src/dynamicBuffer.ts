@@ -389,6 +389,83 @@ export class DynamicBuffer {
   }
 
   /**
+   * Compares this buffer with target and returns a number to indicate whether comes before, after
+   * or they are the same in sort order.
+   *
+   * ```js
+   * buf1.append('ABC');
+   * buf2.append('BCD');
+   * console.log(buf1.compare(buf2));
+   * // -1
+   * ```
+   *
+   * @param target A buffer (`DynamicBuffer` or builtin `Buffer`) or `Uint8Array` with which to
+   * compare this buffer.
+   * @param targetStart The offset within `target` at which to begin comparison, default `0`.
+   * @param targetEnd the offset within `target` at which to end comparison (not inclusive),
+   * default `target.length`.
+   * @param sourceStart The offset within this buffer at which to begin comparison, default `0`.
+   * @param sourceEnd the offset within this buffer at which to end comparison (not inclusive),
+   * default `target.length`.
+   * @returns `0` if `target` is the same as this buffer; `1` if `target` should come before this
+   * buffer when sorted; `-1` if `target` should come after this buffer when sorted.
+   */
+  compare(
+    target: DynamicBuffer | Buffer | Uint8Array,
+    targetStart: number = 0,
+    targetEnd: number = target.length,
+    sourceStart: number = 0,
+    sourceEnd: number = this.length,
+  ) {
+    const otherBuf = target instanceof DynamicBuffer ? (target.buffer || ([] as number[])) : target;
+    const thisBuf = this.buffer || ([] as number[]);
+
+    let i = targetStart;
+    let j = sourceStart;
+
+    while (i < targetEnd && j < sourceEnd && i < target.length && j < this.length) {
+      if (thisBuf[j] !== otherBuf[i]) {
+        return thisBuf[j] > otherBuf[i] ? 1 : -1;
+      }
+
+      i += 1;
+      j += 1;
+    }
+
+    if (i < targetEnd || (i < target.length && target.length < targetEnd)) {
+      return -1;
+    }
+    if (j < sourceEnd || (j < this.length && this.length < sourceEnd)) {
+      return 1;
+    }
+
+    return 0;
+  }
+
+  /**
+   * Compare this buffer with another buffer (`DynamicBuffer` or `Buffer`) or an `Uint8Array`, and
+   * returns true if they are equal, and false if not.
+   *
+   * This method is equivalent to `buf.compare(otherBuffer) === 0`.
+   *
+   * ```js
+   * const buf1 = new DynamicBuffer();
+   * buf1.append('Hello world');
+   * const buf2 = Buffer.from('Hello world');
+   *
+   * console.log(buf1.equals(buf2));
+   * // true
+   * ```
+   *
+   * @param otherBuffer A buffer (`DynamicBuffer` or builtin `Buffer`) or `Uint8Array` with which
+   * to compare this buffer.
+   * @returns `true` if two buffers have exactly the same bytes, `false` otherwise.
+   */
+  equals(otherBuffer: DynamicBuffer | Buffer | Uint8Array) {
+    return this.compare(otherBuffer, 0, otherBuffer.length, 0, this.length) === 0;
+  }
+
+  /**
    * Write data into internal buffer with the specified offset.
    *
    * @param data String to write to buffer.
