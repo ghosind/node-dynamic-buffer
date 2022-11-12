@@ -4,6 +4,7 @@
 [![NPM Package](https://img.shields.io/npm/v/dynamic-buffer)](https://www.npmjs.com/package/dynamic-buffer)
 [![Github Actions build](https://img.shields.io/github/workflow/status/ghosind/node-dynamic-buffer/Test)](https://github.com/ghosind/node-dynamic-buffer)
 [![codecov](https://codecov.io/gh/ghosind/node-dynamic-buffer/branch/main/graph/badge.svg)](https://codecov.io/gh/ghosind/node-dynamic-buffer)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/210eeb335c0a441ea463872fcd4b4569)](https://www.codacy.com/gh/ghosind/node-dynamic-buffer/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ghosind/node-dynamic-buffer&amp;utm_campaign=Badge_Grade)
 [![License](https://img.shields.io/github/license/ghosind/node-dynamic-buffer)](https://github.com/ghosind/node-dynamic-buffer)
 
 Dynamic storage size buffer object based on Node.js builtin [`Buffer`](https://nodejs.org/api/buffer.html).
