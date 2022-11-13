@@ -186,6 +186,31 @@ export class DynamicBuffer {
   }
 
   /**
+   * Reads and returns a byte at the position `offset` in this buffer.
+   *
+   * ```js
+   * buf.append('Hello world');
+   * console.log(buf.read(0));
+   * // 72
+   * ```
+   *
+   * @param offset Number of bytes to skip before starting to read, and the offset must satisfy
+   * between 0 and `this.length - `, default `0`.
+   * @returns The byte at the position in the buffer.
+   */
+  read(offset: number = 0) {
+    if (!this.buffer || offset < 0 || offset >= this.used) {
+      throw new RangeError(`The value of "offset" is out of range. It must be >= 0 and <= ${
+        this.used - 1
+      }. Received ${
+        offset
+      }`);
+    }
+
+    return this.buffer[offset];
+  }
+
+  /**
    * Copies the buffer data onto a new `Buffer` instance without unused parts.
    *
    * ```js
