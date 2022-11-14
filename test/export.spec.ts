@@ -75,6 +75,14 @@ describe('Export string tests', () => {
     assert.equal(buffer.toString('utf8', 20).toString(), '');
   });
 
+  it('Test toString() with large end parameter', () => {
+    const buffer = new DynamicBuffer();
+
+    buffer.append('Hello world');
+
+    assert.equal(buffer.toString('utf8', 0, 100).toString(), 'Hello world');
+  });
+
   it('Test toString() with same start and end parameters', () => {
     const buffer = new DynamicBuffer();
 
