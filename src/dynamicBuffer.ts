@@ -173,14 +173,18 @@ export class DynamicBuffer {
    * @param encoding The character encoding to use, default from buffer encoding.
    * @returns Number of bytes written.
    */
-  write(data: string, offset?: number, length?: number, encoding?: BufferEncoding) {
-    const start = offset || 0;
-    if (start < 0) {
+  write(
+    data: string,
+    offset: number = 0,
+    length: number = data.length,
+    encoding: BufferEncoding | undefined = this.encoding,
+  ) {
+    if (offset < 0) {
       throw new RangeError('The value of "offset" is out of range.');
     }
 
-    const count = this.writeData(data, start, length, encoding);
-    this.used = start + count;
+    const count = this.writeData(data, offset, length, encoding);
+    this.used = offset + count;
 
     return count;
   }
@@ -223,7 +227,7 @@ export class DynamicBuffer {
    * @param end The byte offset to stop coping at (not inclusive), default used bytes offset.
    * @returns The new buffer contains the written data in this buffer.
    */
-  toBuffer(start?: number, end?: number) {
+  toBuffer(start: number = 0, end: number = this.used) {
     if (!this.buffer || this.used === 0) {
       return Buffer.alloc(0);
     }
@@ -253,7 +257,11 @@ export class DynamicBuffer {
    * @param end The byte offset to stop decoding at (not inclusive), default used bytes offset.
    * @returns The string decodes from buffer with the specified range.
    */
-  toString(encoding?: BufferEncoding, start?: number, end?: number) {
+  toString(
+    encoding: BufferEncoding | undefined = this.encoding,
+    start: number = 0,
+    end: number = this.used,
+  ) {
     if (!this.buffer || this.used === 0) {
       return '';
     }
@@ -263,7 +271,7 @@ export class DynamicBuffer {
       return '';
     }
 
-    return this.buffer.toString(encoding || this.encoding, startOffset, endOffset);
+    return this.buffer.toString(encoding, startOffset, endOffset);
   }
 
   /**
