@@ -69,6 +69,8 @@ yarn add dynamic-buffer
 
   - [Iteration](#iteration)
 
+  - [Comparison](#comparison)
+
   - [Export Data](#export-data)
 
 - [APIs](#apis)
@@ -98,6 +100,15 @@ buf.append('Java');
 buf.append('Script!!!', 7);
 console.log(buf.toString());
 // JavaScript!
+```
+
+You can also use `write` method to write data to the specified position in the buffer:
+
+```ts
+buf.append('Hello world!');
+buf.write('Node.js', 6);
+console.log(buf.toString());
+// Hello Node.js
 ```
 
 ### Iteration
@@ -134,6 +145,30 @@ console.log(buf.toString());
 
 - `keys()` returns an iterator of buffer keys (indices).
 
+### Comparison
+
+You can compare `DynamicBuffer` object with another `DynamicBuffer` object, Node.js builtin `Buffer` object, or an `Uint8Array` by `compare` or `equals` methods.
+
+For `compare` method, it returns a number to indicate whether the buffer comes before, after, or is the same as another buffer in sort order.
+
+```ts
+buf.append('ABC');
+console.log(buf.compare(Buffer.from('ABC')));
+// 0
+console.log(buf.compare(Buffer.from('BCD')));
+// -1
+```
+
+For `equals` method, it returns a boolean value to indicate whether the buffer is the same as the target buffer.
+
+```ts
+buf.append('ABC');
+console.log(buf.equals(Buffer.from('ABC')));
+// true
+console.log(buf.equals(Buffer.from('BCD')));
+// false
+```
+
 ### Export Data
 
 You can export buffer content (without unused parts) to string, `Buffer` object, or JSON representation object.
@@ -163,6 +198,14 @@ console.log(buf.toString('utf8', 6, 11));
 
   Append string into buffer.
 
+- `write(data: string, offset?: number, length?: number, encoding?: BufferEncoding): number`
+
+  Write string into buffer at the specified position.
+
+- `read(offset?: number): number`
+
+  Read a byte at the specified position in the buffer.
+
 - `entries(): IterableIterator<[number, number]>`
 
   Get an iterator of index-byte pairs from the buffer.
@@ -186,6 +229,14 @@ console.log(buf.toString('utf8', 6, 11));
 - `toJSON(): { type: string, data: number[] }`
 
   Return a JSON representation object.
+
+- `compare(target: DynamicBuffer | Buffer | Uint8Array, targetStart?: number, targetEnd?: number, sourceStart?: number, sourceEnd?: number)`
+
+  Compares two buffers and returns a number indicating whether this buffer comes before, after, or is the same as another buffer in sort order.
+
+- `equals(otherBuffer: DynamicBuffer | Buffer | Uint8Array): boolean`
+
+  Compares and returns a boolean value. Returns `true` if two buffers have exactly the same bytes, `false` otherwise.
 
 ## Run Tests
 
