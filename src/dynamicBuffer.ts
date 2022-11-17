@@ -215,6 +215,49 @@ export class DynamicBuffer {
   }
 
   /**
+   * Gets the first index at which the given value can be found in the buffer, or `-1` if it is
+   * not present.
+   *
+   * ```js
+   * buf.append('Hello world');
+   * console.log(buf.indexOf('world'));
+   * // 6
+   * console.log(buf.indexOf('not in buffer'));
+   * // -1
+   * ```
+   *
+   * @param value The value what to search for.
+   * @param byteOffset Where to begin searching in the buffer, and it'll be calculated from the
+   * end of buffer if it's negative. Default `0`.
+   * @param encoding The character encoding if the value is a string, default 'utf8'.
+   * @returns The index of first occurrence of value in the buffer, and `-1` if the buffer does
+   * not contain this value.
+   */
+  indexOf(
+    value: string | Buffer | Uint8Array | number | DynamicBuffer,
+    byteOffset: number = 0,
+    encoding: BufferEncoding = 'utf8',
+  ) {
+    let search: string | Buffer | Uint8Array | number;
+    if (value instanceof DynamicBuffer) {
+      search = value.buffer?.subarray(0, value.length) || '';
+    } else {
+      search = value;
+    }
+
+    if (!this.buffer || this.length === 0) {
+      return (typeof search === 'object' || typeof search === 'string') && search.length === 0 ? 0 : -1;
+    }
+
+    let start = byteOffset >= 0 ? byteOffset : this.length + byteOffset;
+    if (start >= this.length) {
+      start = this.length;
+    }
+
+    return this.buffer.subarray(start, this.length).indexOf(search, 0, encoding);
+  }
+
+  /**
    * Copies the buffer data onto a new `Buffer` instance without unused parts.
    *
    * ```js
