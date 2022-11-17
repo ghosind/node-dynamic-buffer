@@ -135,7 +135,7 @@ export class DynamicBuffer {
     data: string,
     lengthParam?: number | BufferEncoding,
     encodingParam?: BufferEncoding | number,
-  ) {
+  ): number {
     let length: number | undefined;
     let encoding: BufferEncoding | undefined;
 
@@ -178,7 +178,7 @@ export class DynamicBuffer {
     offset: number = 0,
     length: number = data.length,
     encoding: BufferEncoding | undefined = this.encoding,
-  ) {
+  ): number {
     if (offset < 0) {
       throw new RangeError('The value of "offset" is out of range.');
     }
@@ -202,7 +202,7 @@ export class DynamicBuffer {
    * between 0 and `this.length - `, default `0`.
    * @returns The byte at the position in the buffer.
    */
-  read(offset: number = 0) {
+  read(offset: number = 0): number {
     if (!this.buffer || offset < 0 || offset >= this.used) {
       throw new RangeError(`The value of "offset" is out of range. It must be >= 0 and <= ${
         this.used - 1
@@ -270,7 +270,7 @@ export class DynamicBuffer {
    * @param end The byte offset to stop coping at (not inclusive), default used bytes offset.
    * @returns The new buffer contains the written data in this buffer.
    */
-  toBuffer(start: number = 0, end: number = this.used) {
+  toBuffer(start: number = 0, end: number = this.used): Buffer {
     if (!this.buffer || this.used === 0) {
       return Buffer.alloc(0);
     }
@@ -304,7 +304,7 @@ export class DynamicBuffer {
     encoding: BufferEncoding | undefined = this.encoding,
     start: number = 0,
     end: number = this.used,
-  ) {
+  ): string {
     if (!this.buffer || this.used === 0) {
       return '';
     }
@@ -327,7 +327,7 @@ export class DynamicBuffer {
    * // {"type":"Buffer","data":[72,101,108,108,111]}
    * ```
    */
-  toJSON() {
+  toJSON(): { type: string, data: number[] } {
     const data: number[] = [];
 
     if (this.buffer && this.used > 0) {
@@ -492,7 +492,7 @@ export class DynamicBuffer {
     targetEnd: number = target.length,
     sourceStart: number = 0,
     sourceEnd: number = this.length,
-  ) {
+  ): number {
     const otherBuf = target instanceof DynamicBuffer ? (target.buffer || ([] as number[])) : target;
     const thisBuf = this.buffer || ([] as number[]);
 
@@ -537,7 +537,7 @@ export class DynamicBuffer {
    * to compare this buffer.
    * @returns `true` if two buffers have exactly the same bytes, `false` otherwise.
    */
-  equals(otherBuffer: DynamicBuffer | Buffer | Uint8Array) {
+  equals(otherBuffer: DynamicBuffer | Buffer | Uint8Array): boolean {
     return this.compare(otherBuffer, 0, otherBuffer.length, 0, this.length) === 0;
   }
 
@@ -550,7 +550,12 @@ export class DynamicBuffer {
    * @param encoding The character encoding to use, default from buffer encoding.
    * @returns Number of bytes written.
    */
-  private writeData(data: string, offset: number, length?: number, encoding?: BufferEncoding) {
+  private writeData(
+    data: string,
+    offset: number,
+    length?: number,
+    encoding?: BufferEncoding,
+  ): number {
     if (typeof data !== 'string') {
       throw new TypeError('argument must be a string');
     }
@@ -576,7 +581,7 @@ export class DynamicBuffer {
    *
    * @param expectSize The number of bytes that minimum size is expected.
    */
-  private ensureSize(expectSize: number) {
+  private ensureSize(expectSize: number): void {
     if (this.size >= expectSize) {
       return;
     }
@@ -603,7 +608,7 @@ export class DynamicBuffer {
    *
    * @param newSize The size of new buffer.
    */
-  private resize(newSize: number) {
+  private resize(newSize: number): void {
     const newBuffer = Buffer.alloc(newSize, this.fill, this.encoding);
 
     if (this.buffer && this.used > 0) {
@@ -621,7 +626,13 @@ export class DynamicBuffer {
    * @param end The end byte offset, default used bytes offset.
    * @returns The start and end byte offsets.
    */
-  private calculateOffsets(start?: number, end?: number) {
+  private calculateOffsets(
+    start?: number,
+    end?: number,
+  ): {
+    startOffset: number,
+    endOffset: number,
+  } {
     let startOffset = start;
     let endOffset = end;
 
