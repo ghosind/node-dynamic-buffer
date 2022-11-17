@@ -1,5 +1,4 @@
 import assert from 'assert';
-import { constants } from 'buffer';
 import { describe, it } from 'mocha';
 
 import { DynamicBuffer } from '../src';
