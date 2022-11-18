@@ -215,6 +215,31 @@ export class DynamicBuffer {
   }
 
   /**
+   * Returns a boolean value to indicate whether this buffer includes a certain value among it.
+   *
+   * ```js
+   * buf.append('Hello world');
+   * console.log(buf.includes('world'));
+   * // true
+   * console.log(buf.includes('not in buffer'));
+   * // false
+   * ```
+   *
+   * @param value The value what to search for.
+   * @param byteOffset Where to begin searching in the buffer, and it'll be calculated from the
+   * end of buffer if it's negative. Default `0`.
+   * @param encoding The character encoding if the value is a string, default 'utf8'.
+   * @returns `true` if `value` was found in this buffer, `false` otherwise.
+   */
+  includes(
+    value: string | Buffer | Uint8Array | number | DynamicBuffer,
+    byteOffset: number = 0,
+    encoding: BufferEncoding = 'utf8',
+  ): boolean {
+    return this.indexOf(value, byteOffset, encoding) !== -1;
+  }
+
+  /**
    * Gets the first index at which the given value can be found in the buffer, or `-1` if it is
    * not present.
    *
