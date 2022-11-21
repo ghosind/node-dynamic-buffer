@@ -279,7 +279,7 @@ export class DynamicBuffer {
       start = this.length;
     }
 
-    return this.buffer.subarray(start, this.length).indexOf(search, 0, encoding);
+    return this.buffer.subarray(0, this.length).indexOf(search, start, encoding);
   }
 
   /**
