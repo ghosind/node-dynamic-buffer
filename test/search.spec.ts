@@ -182,3 +182,93 @@ describe('Includes tests', () => {
     assert.equal(buf.includes('', 32), true);
   });
 });
+
+describe('LastIndexOf tests', () => {
+  it('Test lastIndexOf with empty buffer and empty value.', () => {
+    const buf = new DynamicBuffer();
+
+    assert.equal(buf.lastIndexOf('ABC'), -1);
+    assert.equal(buf.lastIndexOf(''), 0);
+    assert.equal(buf.lastIndexOf(0), -1);
+    assert.equal(buf.lastIndexOf(Buffer.alloc(0)), 0);
+    assert.equal(buf.lastIndexOf(new Uint8Array()), 0);
+    assert.equal(buf.lastIndexOf(new DynamicBuffer()), 0);
+  });
+
+  it('Test lastIndexOf with empty value.', () => {
+    const buf = new DynamicBuffer();
+    buf.append('ABCABCABC');
+
+    assert.equal(buf.lastIndexOf(''), 9);
+    assert.equal(buf.lastIndexOf(0), -1);
+    assert.equal(buf.lastIndexOf(Buffer.alloc(0)), 9);
+    assert.equal(buf.lastIndexOf(new Uint8Array()), 9);
+    assert.equal(buf.lastIndexOf(new DynamicBuffer()), 9);
+  });
+
+  it('Test lastIndexOf with string.', () => {
+    const buf = new DynamicBuffer();
+    buf.append('ABCABCABC');
+
+    assert.equal(buf.lastIndexOf('ABC'), 6);
+    assert.equal(buf.lastIndexOf('BCA'), 4);
+    assert.equal(buf.lastIndexOf('abc'), -1);
+  });
+
+  it('Test lastIndexOf with number.', () => {
+    const buf = new DynamicBuffer();
+    buf.append('ABCABCABC');
+
+    assert.equal(buf.lastIndexOf(65), 6); // A
+    assert.equal(buf.lastIndexOf(67), 8); // C
+    assert.equal(buf.lastIndexOf(97), -1); // a
+  });
+
+  it('Test lastIndexOf with Buffer.', () => {
+    const buf = new DynamicBuffer();
+    buf.append('ABCABCABC');
+
+    assert.equal(buf.lastIndexOf(Buffer.from('ABC')), 6);
+    assert.equal(buf.lastIndexOf(Buffer.from('BCA')), 4);
+    assert.equal(buf.lastIndexOf(Buffer.from('abc')), -1);
+  });
+
+  it('Test lastIndexOf with Uint8Array.', () => {
+    const buf = new DynamicBuffer();
+    buf.append('ABCABCABC');
+
+    assert.equal(buf.lastIndexOf(new Uint8Array([0x41, 0x42, 0x43])), 6);
+    assert.equal(buf.lastIndexOf(new Uint8Array([0x42, 0x43, 0x41])), 4);
+    assert.equal(buf.lastIndexOf(new Uint8Array([0x61, 0x62, 0x63])), -1);
+  });
+
+  it('Test lastIndexOf with DynamicBuffer.', () => {
+    const buf = new DynamicBuffer();
+    buf.append('ABCABCABC');
+
+    const buf1 = new DynamicBuffer();
+    buf1.append('ABC');
+    assert.equal(buf.lastIndexOf(buf1), 6);
+
+    const buf2 = new DynamicBuffer();
+    buf2.append('BCA');
+    assert.equal(buf.lastIndexOf(buf2), 4);
+
+    const buf3 = new DynamicBuffer();
+    buf3.append('abc');
+    assert.equal(buf.lastIndexOf(buf3), -1);
+  });
+
+  it('Test lastIndexOf with byteOffset parameter.', () => {
+    const buf = new DynamicBuffer();
+    buf.append('ABCABCABC');
+
+    assert.equal(buf.lastIndexOf('ABC'), 6);
+    assert.equal(buf.lastIndexOf('ABC', 0), 0);
+    assert.equal(buf.lastIndexOf('ABC', 1), 0);
+    assert.equal(buf.lastIndexOf('ABC', -1), 6);
+    assert.equal(buf.lastIndexOf('ABC', -9), 0); // -11 equals 0
+    assert.equal(buf.lastIndexOf('ABC', 32), 6);
+    assert.equal(buf.lastIndexOf('', 32), 9);
+  });
+});

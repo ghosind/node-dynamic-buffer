@@ -244,10 +244,10 @@ export class DynamicBuffer {
    * not present.
    *
    * ```js
-   * buf.append('Hello world');
-   * console.log(buf.indexOf('world'));
-   * // 6
-   * console.log(buf.indexOf('not in buffer'));
+   * buf.append('ABCABCABC');
+   * console.log(buf.indexOf('ABC'));
+   * // 0
+   * console.log(buf.indexOf('abc'));
    * // -1
    * ```
    *
@@ -262,24 +262,35 @@ export class DynamicBuffer {
     value: string | Buffer | Uint8Array | number | DynamicBuffer,
     byteOffset: number = 0,
     encoding: BufferEncoding = 'utf8',
-  ) {
-    let search: string | Buffer | Uint8Array | number;
-    if (value instanceof DynamicBuffer) {
-      search = value.buffer?.subarray(0, value.length) || '';
-    } else {
-      search = value;
-    }
+  ): number {
+    return this.indexOfWithDir(true, value, byteOffset, encoding);
+  }
 
-    if (!this.buffer || this.length === 0) {
-      return (typeof search === 'object' || typeof search === 'string') && search.length === 0 ? 0 : -1;
-    }
-
-    let start = byteOffset >= 0 ? byteOffset : this.length + byteOffset;
-    if (start >= this.length) {
-      start = this.length;
-    }
-
-    return this.buffer.subarray(0, this.length).indexOf(search, start, encoding);
+  /**
+   * Gets the last index at which the given value can be found in the buffer, or `-1` if it is
+   * not present.
+   *
+   * ```js
+   * buf.append('ABCABCABC');
+   * console.log(buf.indexOf('ABC'));
+   * // 6
+   * console.log(buf.indexOf('abc'));
+   * // -1
+   * ```
+   *
+   * @param value The value what to search for.
+   * @param byteOffset Where to begin searching in the buffer, and it'll be calculated from the
+   * end of buffer if it's negative. Default `this.length`.
+   * @param encoding The character encoding if the value is a string, default 'utf8'.
+   * @returns The index of last occurrence of value in the buffer, and `-1` if the buffer does
+   * not contain this value.
+   */
+  lastIndexOf(
+    value: string | Buffer | Uint8Array | number | DynamicBuffer,
+    byteOffset: number = this.length,
+    encoding: BufferEncoding = 'utf8',
+  ): number {
+    return this.indexOfWithDir(false, value, byteOffset, encoding);
   }
 
   /**
@@ -642,6 +653,48 @@ export class DynamicBuffer {
 
     this.buffer = newBuffer;
     this.size = newSize;
+  }
+
+  /**
+   * Gets the first or last index at which the given value can be found in the buffer, or `-1`
+   * if it is not present.
+   *
+   * @param isFirst A boolean value to indicate the expected index is the first or last occurrence.
+   * @param value The value what to search for.
+   * @param byteOffset here to begin searching in the buffer.
+   * @param encoding The character encoding if the value is a string
+   * @returns The index of first or last occurrence of value in the buffer, and `-1` if the buffer
+   * does not contain this value.
+   */
+  private indexOfWithDir(
+    isFirst: boolean,
+    value: string | Buffer | Uint8Array | number | DynamicBuffer,
+    byteOffset: number,
+    encoding: BufferEncoding,
+  ): number {
+    let search: string | Buffer | Uint8Array | number;
+    if (value instanceof DynamicBuffer) {
+      search = value.buffer?.subarray(0, value.length) || '';
+    } else {
+      search = value;
+    }
+
+    if (!this.buffer || this.length === 0) {
+      return (typeof search === 'object' || typeof search === 'string') && search.length === 0
+        ? 0
+        : -1;
+    }
+
+    let start = byteOffset >= 0 ? byteOffset : this.length + byteOffset;
+    if (start >= this.length) {
+      start = this.length;
+    }
+
+    if (isFirst) {
+      return this.buffer.subarray(0, this.length).indexOf(search, start, encoding);
+    }
+
+    return this.buffer.subarray(0, this.length).lastIndexOf(search, start, encoding);
   }
 
   /**
