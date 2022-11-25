@@ -69,6 +69,8 @@ yarn add dynamic-buffer
 
   - [Iteration](#iteration)
 
+  - [Search](#search)
+
   - [Comparison](#comparison)
 
   - [Export Data](#export-data)
@@ -144,6 +146,17 @@ console.log(buf.toString());
   ```
 
 - `keys()` returns an iterator of buffer keys (indices).
+
+## Search
+
+You can search a value in the buffer by `indexOf` or `lastIndexOf`, and get the position of the first/last occurrence in the buffer. The searching value can be a string, a number, a `Buffer`, an `Uint8Array`, or another `DynamicBuffer`.
+
+```ts
+buf.append('ABCABCABC');
+buf.indexOf('ABC'); // 0
+buf.lastIndexOf('ABC'); // 6
+buf.indexOf('abc'); // -1
+```
 
 ### Comparison
 
@@ -229,6 +242,18 @@ console.log(buf.toString('utf8', 6, 11));
 - `toJSON(): { type: string, data: number[] }`
 
   Return a JSON representation object.
+
+- `includes(value: string | Buffer | Uint8Array | number | DynamicBuffer, byteOffset?: number, encoding?: BufferEncoding): boolean`
+
+  Returns a boolean value to indicate whether this buffer includes a certain value among it.
+
+- `indexOf(value: string | Buffer | Uint8Array | number | DynamicBuffer, byteOffset?: number, encoding?: BufferEncoding): number`
+
+  Gets the first index at which the given value can be found in the buffer, or `-1` if it is not present.
+
+- `lastIndexOf(value: string | Buffer | Uint8Array | number | DynamicBuffer, byteOffset?: number, encoding?: BufferEncoding): number`
+
+  Gets the last index at which the given value can be found in the buffer, or `-1` if it is not present.
 
 - `compare(target: DynamicBuffer | Buffer | Uint8Array, targetStart?: number, targetEnd?: number, sourceStart?: number, sourceEnd?: number)`
 
