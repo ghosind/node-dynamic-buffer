@@ -23,6 +23,8 @@ export interface DynamicBufferOptions {
    * Character encoding for `fill` if `fill` is a string, default 'utf8'.
    */
   encoding?: BufferEncoding;
+
+  factor?: number;
 }
 
 /**
@@ -44,6 +46,8 @@ export class DynamicBuffer {
    * The default size of the buffer, if `size` in the options is not specified.
    */
   private readonly DefaultInitialSize: number = 16;
+
+  private readonly DefaultResizeFactor: number = 0.75;
 
   /**
    * Internal buffer to stores data.
@@ -70,6 +74,8 @@ export class DynamicBuffer {
    */
   private encoding?: BufferEncoding;
 
+  private factor: number;
+
   constructor(options?: DynamicBufferOptions) {
     if (options?.size !== undefined) {
       this.size = options.size;
@@ -84,6 +90,11 @@ export class DynamicBuffer {
     this.used = 0;
     this.fill = options?.fill || 0;
     this.encoding = options?.encoding || 'utf8';
+    this.factor = options?.factor || this.DefaultResizeFactor;
+
+    if (this.factor <= 0 || Number.isNaN(this.factor)) {
+      throw new TypeError('Invalid factor');
+    }
 
     if (this.size > 0) {
       this.buffer = Buffer.alloc(this.size, this.fill, this.encoding);
@@ -626,10 +637,8 @@ export class DynamicBuffer {
       throw new Error('Buffer size is overflow');
     }
 
-    let newSize = this.size ? this.size * 2 : expectSize;
-    while (newSize < expectSize) {
-      newSize *= 2;
-    }
+    const sizeWithFactor = Math.ceil(this.size * (1 + this.factor));
+    let newSize = expectSize > sizeWithFactor ? expectSize : sizeWithFactor;
 
     if (newSize > constants.MAX_LENGTH) {
       newSize = constants.MAX_LENGTH;
