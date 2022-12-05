@@ -93,7 +93,7 @@ export class DynamicBuffer {
     this.factor = options?.factor || this.DefaultResizeFactor;
 
     if (this.factor <= 0 || Number.isNaN(this.factor)) {
-      throw new TypeError('Invalid factor');
+      throw new Error('Invalid factor');
     }
 
     if (this.size > 0) {
