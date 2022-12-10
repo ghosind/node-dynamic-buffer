@@ -30,6 +30,14 @@ describe('Initialization tests', () => {
   it('Test initializing with a size large than buffer.constants.MAX_LENGTH', () => {
     assert.throws(() => new DynamicBuffer({ size: constants.MAX_LENGTH + 1 }));
   });
+
+  it("Test initializing with invalid factor", () => {
+    assert.throws(() => {
+      new DynamicBuffer({
+        factor: -1,
+      });
+    });
+  });
 });
 
 describe('Resize tests', () => {
@@ -46,10 +54,12 @@ describe('Resize tests', () => {
     const buffer = new DynamicBuffer({
       size: 2,
     });
+    const str = 'Hello world';
 
-    buffer.append('Hello world');
+    buffer.append(str);
 
-    assert.equal(buffer.toString(), 'Hello world');
+    assert.equal(buffer.toString(), str);
+    assert.equal(Reflect.get(buffer, 'size'), str.length);
   });
 
   it('Test resize again', () => {
@@ -59,5 +69,28 @@ describe('Resize tests', () => {
     buffer.append('This is DynamicBuffer.');
 
     assert.equal(buffer.toString(), 'Hello world!\nThis is DynamicBuffer.');
+  });
+
+  it('Test resize with default factor', () => {
+    const buffer = new DynamicBuffer({
+      size: 10,
+    });
+    const str = 'Hello world';
+
+    buffer.append(str);
+
+    assert.equal(Reflect.get(buffer, 'size'), Math.ceil(10 * (1 + Reflect.get(buffer, 'DefaultResizeFactor'))));
+  });
+
+  it('Test resize with custom factor', () => {
+    const buffer = new DynamicBuffer({
+      size: 10,
+      factor: 2, // (1+2)x
+    });
+    const str = 'Hello world';
+
+    buffer.append(str);
+
+    assert.equal(Reflect.get(buffer, 'size'), Math.ceil(10 * (1 + 2)));
   });
 });
