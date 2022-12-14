@@ -31,12 +31,20 @@ describe('Initialization tests', () => {
     assert.throws(() => new DynamicBuffer({ size: constants.MAX_LENGTH + 1 }));
   });
 
-  it("Test initializing with invalid factor", () => {
+  it('Test initializing with invalid factor', () => {
     assert.throws(() => {
+      // eslint-disable-next-line no-new
       new DynamicBuffer({
         factor: -1,
       });
     });
+  });
+
+  it('Test initializing with initial data', () => {
+    const data = 'Hello world';
+    const buffer = new DynamicBuffer(data);
+
+    assert.equal(buffer.toString(), data);
   });
 });
 

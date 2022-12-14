@@ -76,7 +76,25 @@ export class DynamicBuffer {
 
   private factor: number;
 
-  constructor(options?: DynamicBufferOptions) {
+  constructor();
+
+  constructor(options: DynamicBufferOptions);
+
+  constructor(data: string);
+
+  constructor(data: string, options: DynamicBufferOptions);
+
+  constructor(
+    data?: string | DynamicBufferOptions,
+    options?: DynamicBufferOptions,
+  ) {
+    if (typeof data !== 'string') {
+      // eslint-disable-next-line no-param-reassign
+      options = data;
+      // eslint-disable-next-line no-param-reassign
+      data = undefined;
+    }
+
     if (options?.size !== undefined) {
       this.size = options.size;
     } else {
@@ -98,6 +116,10 @@ export class DynamicBuffer {
 
     if (this.size > 0) {
       this.buffer = Buffer.alloc(this.size, this.fill, this.encoding);
+    }
+
+    if (data) {
+      this.append(data);
     }
   }
 
