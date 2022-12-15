@@ -24,6 +24,10 @@ export interface DynamicBufferOptions {
    */
   encoding?: BufferEncoding;
 
+  /**
+   * The factor value for buffer resizing. By default, the `resize` method will increase the
+   * buffer size with the product of the current size and this factor value.
+   */
   factor?: number;
 }
 
@@ -47,6 +51,9 @@ export class DynamicBuffer {
    */
   private readonly DefaultInitialSize: number = 16;
 
+  /**
+   * The default factor value for buffer resizing.
+   */
   private readonly DefaultResizeFactor: number = 0.75;
 
   /**
@@ -74,14 +81,68 @@ export class DynamicBuffer {
    */
   private encoding?: BufferEncoding;
 
+  /**
+   * The factor value for buffer resizing.
+   */
   private factor: number;
 
+  /**
+   * Create a DynamicBuffer with default settings.
+   *
+   * ```js
+   * const buffer = new DynamicBuffer();
+   *
+   * // ...
+   * ```
+   */
   constructor();
 
+  /**
+   * Create a DynamicBuffer with the specific settings.
+   *
+   * ```js
+   * const buffer = new DynamicBuffer({ size: 32, factor: 1 });
+   * // set initial size to 32, and resize factor to 1.
+   *
+   * // ...
+   * ```
+   *
+   * @param options Buffer settings.
+   */
   constructor(options: DynamicBufferOptions);
 
+  /**
+   * Create a DynamicBuffer with the initial data and default settings.
+   *
+   * ```js
+   * const buffer = new DynamicBuffer('Hello world');
+   *
+   * console.log(buffer.toString());
+   * // Hello world
+   *
+   * // ...
+   * ```
+   *
+   * @param data Initial data in the buffer.
+   */
   constructor(data: string);
 
+  /**
+   * Create a DynamicBuffer with initial data and the specific settings.
+   *
+   * ```js
+   * const buffer = new DynamicBuffer('Hello world', { size: 32 });
+   * // set initial size to 32, and initial data is 'Hello world'.
+   *
+   * console.log(buffer.toString());
+   * // Hello world
+   *
+   * // ...
+   * ```
+   *
+   * @param data Initial data in the buffer.
+   * @param options Buffer settings.
+   */
   constructor(data: string, options: DynamicBufferOptions);
 
   constructor(
