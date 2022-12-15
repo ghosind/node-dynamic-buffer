@@ -46,6 +46,14 @@ describe('Initialization tests', () => {
 
     assert.equal(buffer.toString(), data);
   });
+
+  it('Test initializing with initial data and initial size', () => {
+    const data = 'Hello world';
+    const buffer = new DynamicBuffer(data, { size: 4 });
+
+    assert.equal(buffer.toString(), data);
+    assert.equal(Reflect.get(buffer, 'size'), data.length); // size * (1 + factor) < data.length
+  });
 });
 
 describe('Resize tests', () => {
