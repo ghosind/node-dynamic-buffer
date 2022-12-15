@@ -12,6 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/ghosind/node-dynamic-buffer.git"
   },
+  "main": "lib/index.js",
   "keywords": [
     "buffer",
     "dynamic"
