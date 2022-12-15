@@ -44,7 +44,6 @@
     "README.md",
     "package.json",
     ".mocharc.json",
-    ".gitignore",
     "tsconfig.json"
   ]
 }
