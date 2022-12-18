@@ -198,6 +198,13 @@ export class DynamicBuffer {
   }
 
   /**
+   * Returns true if obj is a DynamicBuffer, false otherwise.
+   */
+  static isDynamicBuffer(obj: any) {
+    return obj instanceof DynamicBuffer;
+  }
+
+  /**
    * Appends string to this buffer according to the character encoding.
    *
    * ```js
