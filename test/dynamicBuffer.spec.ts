@@ -110,3 +110,10 @@ describe('Resize tests', () => {
     assert.equal(Reflect.get(buffer, 'size'), Math.ceil(10 * (1 + 2)));
   });
 });
+
+describe('Static methods test', () => {
+  it('Test isDynamicBuffer static method', () => {
+    assert.equal(DynamicBuffer.isDynamicBuffer(Buffer.from('')), false);
+    assert.equal(DynamicBuffer.isDynamicBuffer(new DynamicBuffer()), true);
+  });
+});
