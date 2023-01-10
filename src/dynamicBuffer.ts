@@ -226,37 +226,11 @@ export class DynamicBuffer {
    * @param encoding The character encoding to use, default from buffer encoding.
    * @returns The number of bytes written.
    */
-  append(data: string, length?: number, encoding?: BufferEncoding): number;
-
-  /**
-   * Appends string to this buffer according to the character encoding.
-   *
-   * @param data String to write to buffer.
-   * @param encoding The character encoding to use, default from buffer encoding.
-   * @param length Maximum number of bytes to write, default the length of string.
-   * @returns The number of bytes written.
-   * @deprecated
-   */
-  append(data: string, encoding?: BufferEncoding, length?: number): number;
-
   append(
     data: string,
-    lengthParam?: number | BufferEncoding,
-    encodingParam?: BufferEncoding | number,
+    length?: number,
+    encoding?: BufferEncoding,
   ): number {
-    let length: number | undefined;
-    let encoding: BufferEncoding | undefined;
-
-    if (typeof lengthParam === 'number' || typeof encodingParam === 'string') {
-      // @ts-ignore
-      length = lengthParam;
-      // @ts-ignore
-      encoding = encodingParam;
-    } else {
-      encoding = lengthParam;
-      length = encodingParam;
-    }
-
     const count = this.writeData(data, this.used, length, encoding);
     this.used += count;
 

@@ -84,15 +84,6 @@ describe('Append tests', () => {
     assert.equal(buffer.toString(), str);
   });
 
-  it('Test append overload', () => {
-    const buffer = new DynamicBuffer();
-
-    const count = buffer.append('Hello world', 'utf8');
-
-    assert.equal(count, 11);
-    assert.equal(buffer.toString(), 'Hello world');
-  });
-
   it('Test appending string to zero size buffer', () => {
     const buffer = new DynamicBuffer({ size: 0 });
     const str = 'Hello world';
