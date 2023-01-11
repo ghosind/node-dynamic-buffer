@@ -272,6 +272,30 @@ export class DynamicBuffer {
   }
 
   /**
+   * Takes an integer value and returns the item at that index, allowing for positive and negative
+   * integers. Negative integers count back from the last item in the array. Takes an integer value
+   * and returns the item at the index.
+   *
+   * ```js
+   * buf.append('Hello world');
+   * console.log(buf.at(0));
+   * // 72
+   *
+   * @param index Zero-based index of the byte in the buffer to be returned.
+   * @returns The byte at the position in the buffer.
+   */
+  at(index: number): number | undefined {
+    if (!this.buffer || index >= this.used) {
+      return undefined;
+    }
+
+    if (index >= 0) {
+      return this.buffer.at(index);
+    }
+    return this.buffer.at(index - (this.size - this.length));
+  }
+
+  /**
    * Reads and returns a byte at the position `offset` in this buffer.
    *
    * ```js
@@ -281,7 +305,7 @@ export class DynamicBuffer {
    * ```
    *
    * @param offset Number of bytes to skip before starting to read, and the offset must satisfy
-   * between 0 and `this.length - `, default `0`.
+   * between 0 and `this.length`, default `0`.
    * @returns The byte at the position in the buffer.
    */
   read(offset: number = 0): number {

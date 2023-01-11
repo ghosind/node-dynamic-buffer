@@ -44,3 +44,47 @@ describe('Read tests', () => {
     });
   });
 });
+
+describe('At tests', () => {
+  it('Test at with positive index within buffer\'s length', () => {
+    const str = 'Hello world';
+    const buffer = new DynamicBuffer(str);
+
+    for (let i = 0; i < str.length; i += 1) {
+      assert.equal(buffer.at(i), str.charCodeAt(i));
+    }
+  });
+
+  it('Test at with positive index greater than buffer\'s length', () => {
+    const str = 'Hello world';
+    const buffer = new DynamicBuffer(str);
+
+    assert.equal(buffer.at(str.length), undefined);
+  });
+
+  it('Test at with a negative index', () => {
+    const str = 'Hello world';
+    const buffer = new DynamicBuffer(str);
+
+    for (let i = 0; i < str.length; i += 1) {
+      assert.equal(buffer.at(0 - str.length + i), str.charCodeAt(i));
+    }
+  });
+
+  it('Test at with negative index more than buffer\'s length', () => {
+    const str = 'Hello world';
+    const buffer = new DynamicBuffer(str);
+
+    assert.equal(buffer.at(-str.length - 1), undefined);
+  });
+
+  it('Test at with specified buffer size and negative index', () => {
+    const str = 'Hello world';
+    const buffer = new DynamicBuffer(str, { size: str.length });
+
+    for (let i = 0; i < str.length; i += 1) {
+      assert.equal(buffer.at(0 - str.length + i), str.charCodeAt(i));
+    }
+    assert.equal(buffer.at(-str.length - 1), undefined);
+  });
+});
