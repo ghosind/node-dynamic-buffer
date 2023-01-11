@@ -288,11 +288,19 @@ export class DynamicBuffer {
     if (!this.buffer || index >= this.used) {
       return undefined;
     }
-
     if (index >= 0) {
-      return this.buffer.at(index);
+      return this.buffer[index];
     }
-    return this.buffer.at(index - (this.size - this.length));
+    if (typeof this.buffer.at === 'function') {
+      return this.buffer.at(index - (this.size - this.length));
+    }
+
+    // For Node 14 and lower versions.
+    if (index + this.length < 0) {
+      return undefined;
+    }
+
+    return this.buffer[index + this.length];
   }
 
   /**
