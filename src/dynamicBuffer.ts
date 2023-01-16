@@ -162,6 +162,10 @@ export class DynamicBuffer {
       this.size = this.DefaultInitialSize;
     }
 
+    if (data && data.length > this.size) {
+      this.size = data.length;
+    }
+
     if (this.size < 0 || this.size > constants.MAX_LENGTH) {
       throw new Error('Invalid buffer size');
     }
