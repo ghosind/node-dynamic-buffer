@@ -692,6 +692,30 @@ export class DynamicBuffer {
   }
 
   /**
+   * Reverses the buffer in place and returns the reference to the buffer. The first byte in the
+   * buffer now becoming the last, and the last byte in the buffer becoming the first.
+   *
+   * ```js
+   * const buf = new DynamicBuffer('ABC');
+   * console.log(buf.reverse().toString());
+   * // CBA
+   * console.log(buf.toString());
+   * // CBA
+   * ```
+   *
+   * @returns The reference to this buffer.
+   */
+  reverse(): DynamicBuffer {
+    if (!this.buffer || this.length === 0) {
+      return this;
+    }
+
+    this.buffer.subarray(0, this.length).reverse();
+
+    return this;
+  }
+
+  /**
    * Write data into internal buffer with the specified offset.
    *
    * @param data String to write to buffer.
