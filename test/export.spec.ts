@@ -113,3 +113,69 @@ describe('Exports to JSON object', () => {
     assert.equal(JSON.stringify(buf), '{"type":"Buffer","data":[72,101,108,108,111]}');
   });
 });
+
+describe('Copy to another storage', () => {
+  it('Test copy()', () => {
+    const str = 'hello world';
+    const buf1 = new DynamicBuffer(str);
+    const buf2 = new DynamicBuffer();
+
+    assert.equal(buf1.copy(buf2), str.length);
+    assert.equal(buf2.toString(), 'hello world');
+  });
+
+  it('Test copy() with builtin Buffer', () => {
+    const str = 'hello world';
+    const buf1 = new DynamicBuffer(str);
+    const buf2 = Buffer.alloc(15, '.');
+
+    assert.equal(buf1.copy(buf2), str.length);
+    assert.equal(buf2.toString(), 'hello world....');
+  });
+
+  it('Test copy() with builtin Uint8Array', () => {
+    const str = 'hello world';
+    const buf1 = new DynamicBuffer(str);
+    const buf2 = new Uint8Array(str.length);
+
+    assert.equal(buf1.copy(buf2), str.length);
+    for (let i = 0; i < buf2.length; i += 1) {
+      assert.equal(buf2[i], str.charCodeAt(i));
+    }
+  });
+
+  it('Test copy() with invalid target start', () => {
+    const buf1 = new DynamicBuffer('hello world');
+    const buf2 = new DynamicBuffer();
+
+    assert.throws(() => {
+      buf1.copy(buf2, -1);
+    });
+  });
+
+  it('Test copy() with invalid source start', () => {
+    const buf1 = new DynamicBuffer('hello world');
+    const buf2 = new DynamicBuffer();
+
+    assert.throws(() => {
+      buf1.copy(buf2, 0, -1);
+    });
+  });
+
+  it('Test copy() with big source end', () => {
+    const str = '!hello world';
+    const buf1 = new DynamicBuffer(str);
+    const buf2 = new DynamicBuffer('...');
+
+    assert.equal(buf1.copy(buf2, 1, 1, 100), str.length - 1);
+    assert.equal(buf2.toString(), '.hello world');
+  });
+
+  it('Test copy() with empty buffer', () => {
+    const buf1 = new DynamicBuffer();
+    const buf2 = Buffer.alloc(5, '.');
+
+    assert.equal(buf1.copy(buf2), 0);
+    assert.equal(buf2.toString(), '.....');
+  });
+});

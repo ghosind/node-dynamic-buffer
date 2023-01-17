@@ -720,6 +720,44 @@ export class DynamicBuffer {
   }
 
   /**
+   * Copies data from a region of `buf` to a region in `target`.
+   *
+   * @param target A buffer to copy into.
+   * @param targetStart The offset within `target` at which to be begin writing, default 0.
+   * @param sourceStart The offset within `buf` from which to begin copying, default 0.
+   * @param sourceEnd The offset within `buf` at which to stop copying (not inclusive),
+   * default `buf.length`.
+   * @returns The number of bytes copied.
+   */
+  copy(
+    target: DynamicBuffer | Buffer | Uint8Array,
+    targetStart: number = 0,
+    sourceStart: number = 0,
+    sourceEnd: number = this.length,
+  ): number {
+    if (targetStart < 0) {
+      throw new RangeError(`The value of 'targetStart' is out of range. It must be >=0. Received ${targetStart}`);
+    }
+    if (sourceStart < 0) {
+      throw new RangeError(`The value of 'sourceStart' is out of range. It must be >=0. Received ${sourceStart}`);
+    }
+    if (sourceEnd > this.length) {
+      // eslint-disable-next-line no-param-reassign
+      sourceEnd = this.length;
+    }
+
+    if (target instanceof DynamicBuffer) {
+      return target.write(this.toString(this.encoding, sourceStart, sourceEnd), targetStart);
+    }
+
+    if (!this.buffer || this.length === 0) {
+      return 0;
+    }
+
+    return this.buffer.copy(target, targetStart, sourceStart, sourceEnd);
+  }
+
+  /**
    * Write data into internal buffer with the specified offset.
    *
    * @param data String to write to buffer.
