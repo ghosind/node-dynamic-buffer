@@ -1,6 +1,7 @@
 import { constants } from 'buffer';
 
 import { DynamicBufferIterator } from './iterator';
+import { rangeCheck } from './utils';
 
 /**
  * The character encoding that is supported by Node.js, copy from Node.js Buffer module.
@@ -266,7 +267,7 @@ export class DynamicBuffer {
     encoding: BufferEncoding | undefined = this.encoding,
   ): number {
     if (offset < 0) {
-      throw new RangeError('The value of "offset" is out of range.');
+      rangeCheck('offset', offset, 0);
     }
 
     const count = this.writeData(data, offset, length, encoding);
@@ -322,13 +323,10 @@ export class DynamicBuffer {
    */
   read(offset: number = 0): number {
     if (!this.buffer || offset < 0 || offset >= this.used) {
-      throw new RangeError(`The value of "offset" is out of range. It must be >= 0 and <= ${
-        this.used - 1
-      }. Received ${
-        offset
-      }`);
+      rangeCheck('offset', offset, 0, this.used - 1);
     }
 
+    // @ts-ignore
     return this.buffer[offset];
   }
 
@@ -735,12 +733,8 @@ export class DynamicBuffer {
     sourceStart: number = 0,
     sourceEnd: number = this.length,
   ): number {
-    if (targetStart < 0) {
-      throw new RangeError(`The value of 'targetStart' is out of range. It must be >=0. Received ${targetStart}`);
-    }
-    if (sourceStart < 0) {
-      throw new RangeError(`The value of 'sourceStart' is out of range. It must be >=0. Received ${sourceStart}`);
-    }
+    rangeCheck('targetStart', targetStart, 0);
+    rangeCheck('sourceStart', sourceStart, 0);
     if (sourceEnd > this.length) {
       // eslint-disable-next-line no-param-reassign
       sourceEnd = this.length;
