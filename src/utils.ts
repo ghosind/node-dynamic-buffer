@@ -1,3 +1,5 @@
+import { DynamicBuffer } from "./dynamicBuffer";
+
 export const rangeCheck = (field: string, value: number, min?: number, max?: number) => {
   if (min !== undefined && value < min) {
     throw RangeError(`The value of '${field}' is out of range. It must be >= ${min}. Received ${value}`);
@@ -7,3 +9,19 @@ export const rangeCheck = (field: string, value: number, min?: number, max?: num
     throw RangeError(`The value of '${field}' is out of range. It must be <= ${max}. Received ${value}`);
   }
 };
+
+/**
+ * Returns true if obj is a DynamicBuffer, false otherwise.
+ *
+ * ```js
+ * import { isDynamicBuffer } from 'dynamic-buffer';
+ *
+ * const buf1 = new DynamicBuffer();
+ * isDynamicBuffer(buf1); // true
+ * const buf2 = Buffer.from('');
+ * isDynamicBuffer(buf2); // false
+ * ```
+ */
+export const isDynamicBuffer = (val: any) => {
+  return val instanceof DynamicBuffer;
+}

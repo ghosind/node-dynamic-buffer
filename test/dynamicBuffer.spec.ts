@@ -2,7 +2,7 @@ import assert from 'assert';
 import { constants } from 'buffer';
 import { describe, it } from 'mocha';
 
-import { DynamicBuffer } from '../src';
+import { DynamicBuffer, isDynamicBuffer } from '../src';
 
 describe('Initialization tests', () => {
   it('Test initializing with default size', () => {
@@ -111,9 +111,9 @@ describe('Resize tests', () => {
   });
 });
 
-describe('Static methods test', () => {
-  it('Test isDynamicBuffer static method', () => {
-    assert.equal(DynamicBuffer.isDynamicBuffer(Buffer.from('')), false);
-    assert.equal(DynamicBuffer.isDynamicBuffer(new DynamicBuffer()), true);
+describe('Tools methods test', () => {
+  it('Test isDynamicBuffer util method', () => {
+    assert.equal(isDynamicBuffer(Buffer.from('')), false);
+    assert.equal(isDynamicBuffer(new DynamicBuffer()), true);
   });
 });
