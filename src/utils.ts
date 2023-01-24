@@ -22,4 +22,4 @@ export const rangeCheck = (field: string, value: number, min?: number, max?: num
  * isDynamicBuffer(buf2); // false
  * ```
  */
-export const isDynamicBuffer = (val: any) =>  val instanceof DynamicBuffer;
+export const isDynamicBuffer = (val: any) => val instanceof DynamicBuffer;
