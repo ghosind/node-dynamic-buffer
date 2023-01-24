@@ -1,4 +1,4 @@
-import { DynamicBuffer } from "./dynamicBuffer";
+import { DynamicBuffer } from './dynamicBuffer';
 
 export const rangeCheck = (field: string, value: number, min?: number, max?: number) => {
   if (min !== undefined && value < min) {
@@ -22,6 +22,4 @@ export const rangeCheck = (field: string, value: number, min?: number, max?: num
  * isDynamicBuffer(buf2); // false
  * ```
  */
-export const isDynamicBuffer = (val: any) => {
-  return val instanceof DynamicBuffer;
-}
+export const isDynamicBuffer = (val: any) =>  val instanceof DynamicBuffer;
