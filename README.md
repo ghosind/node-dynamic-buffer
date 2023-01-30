@@ -7,7 +7,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/210eeb335c0a441ea463872fcd4b4569)](https://www.codacy.com/gh/ghosind/node-dynamic-buffer/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ghosind/node-dynamic-buffer&amp;utm_campaign=Badge_Grade)
 [![License](https://img.shields.io/github/license/ghosind/node-dynamic-buffer)](https://github.com/ghosind/node-dynamic-buffer)
 
-Dynamic storage size buffer object based on Node.js builtin [`Buffer`](https://nodejs.org/api/buffer.html).
+An automatically resizing storage size buffer type for Node.js that is based on Node.js builtin [`Buffer`](https://nodejs.org/api/buffer.html).
 
 ## Installation
 
@@ -67,6 +67,8 @@ yarn add dynamic-buffer
 
   - [Write Data](#write-data)
 
+  - [Read Data](#read-data)
+
   - [Iteration](#iteration)
 
   - [Search](#search)
@@ -75,7 +77,7 @@ yarn add dynamic-buffer
 
   - [Export Data](#export-data)
 
-- [APIs](#apis)
+  - [Utils](#utils)
 
 - [Run Tests](#run-tests)
 
@@ -113,6 +115,17 @@ console.log(buf.toString());
 // Hello Node.js
 ```
 
+### Read Data
+
+You can access the byte at the specified position in the buffer by `read` or `at` methods:
+
+```ts
+const buf = new DynamicBuffer('Hello world');
+
+buf.at(0); // 72
+buf.read(1); // 101
+```
+
 ### Iteration
 
 `DynamicBuffer` provides three ways to iterate data from the specified buffer, you can use them with `for...of` statement.
@@ -147,7 +160,7 @@ console.log(buf.toString());
 
 - `keys()` returns an iterator of buffer keys (indices).
 
-## Search
+### Search
 
 You can search a value in the buffer by `indexOf` or `lastIndexOf`, and get the position of the first/last occurrence in the buffer. The searching value can be a string, a number, a `Buffer`, an `Uint8Array`, or another `DynamicBuffer`.
 
@@ -205,63 +218,19 @@ console.log(buf.toString('utf8', 6, 11));
 // world
 ```
 
-## APIs
+### Utils
 
-- `append(data: string, length?: number, encoding?: BufferEncoding): number`
+We provided `isDynamicBuffer` function to indicating an object is a DynamicBuffer object or not.
 
-  Append string into buffer.
+```ts
+import { isDynamicBuffer } from 'dynamic-buffer';
 
-- `write(data: string, offset?: number, length?: number, encoding?: BufferEncoding): number`
+const buf1 = Buffer.alloc(8);
+const buf2 = new DynamicBuffer();
 
-  Write string into buffer at the specified position.
-
-- `read(offset?: number): number`
-
-  Read a byte at the specified position in the buffer.
-
-- `entries(): IterableIterator<[number, number]>`
-
-  Get an iterator of index-byte pairs from the buffer.
-
-- `keys(): IterableIterator<number>`
-
-  Get an iterator of indices in the buffer.
-
-- `values(): IterableIterator<number>`
-
-  Get an iterator of data in the buffer.
-
-- `toString(encoding?: BufferEncoding, start?: number, end?: number): string`
-
-  Decode buffer to a string.
-
-- `toBuffer(start?: number, end?: number): Buffer`
-
-  Return a new builtin Buffer object.
-
-- `toJSON(): { type: string, data: number[] }`
-
-  Return a JSON representation object.
-
-- `includes(value: string | Buffer | Uint8Array | number | DynamicBuffer, byteOffset?: number, encoding?: BufferEncoding): boolean`
-
-  Returns a boolean value to indicate whether this buffer includes a certain value among it.
-
-- `indexOf(value: string | Buffer | Uint8Array | number | DynamicBuffer, byteOffset?: number, encoding?: BufferEncoding): number`
-
-  Gets the first index at which the given value can be found in the buffer, or `-1` if it is not present.
-
-- `lastIndexOf(value: string | Buffer | Uint8Array | number | DynamicBuffer, byteOffset?: number, encoding?: BufferEncoding): number`
-
-  Gets the last index at which the given value can be found in the buffer, or `-1` if it is not present.
-
-- `compare(target: DynamicBuffer | Buffer | Uint8Array, targetStart?: number, targetEnd?: number, sourceStart?: number, sourceEnd?: number)`
-
-  Compares two buffers and returns a number indicating whether this buffer comes before, after, or is the same as another buffer in sort order.
-
-- `equals(otherBuffer: DynamicBuffer | Buffer | Uint8Array): boolean`
-
-  Compares and returns a boolean value. Returns `true` if two buffers have exactly the same bytes, `false` otherwise.
+isDynamicBuffer(buf1); // false
+isDynamicBuffer(buf2); // true
+```
 
 ## Run Tests
 
