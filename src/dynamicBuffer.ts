@@ -838,6 +838,33 @@ export class DynamicBuffer {
   }
 
   /**
+   * Returns a new Buffer that references the same memory as the original, but offset and cropped
+   * by the start and end indices.
+   *
+   * ```ts
+   * const buf = new DynamicBuffer('ABCD');
+   * const sub = buf.subarray(1, 3);
+   * sub[0] = 67;
+   * sub[1] = 66;
+   * console.log(buf.toString());
+   * // ACBD
+   * ```
+   *
+   * @param start Where the new `Buffer` will start, default 0.
+   * @param end Where the new `Buffer` will end (not inclusive), default the length of this buffer.
+   * @returns The new buffer.
+   */
+  subarray(start: number = 0, end: number = this.length): Buffer {
+    const { startOffset, endOffset } = this.calculateOffsets(start, end);
+
+    if (!this.buffer || this.length === 0) {
+      return Buffer.alloc(0);
+    }
+
+    return this.buffer?.subarray(startOffset, endOffset);
+  }
+
+  /**
    * Write data into internal buffer with the specified offset.
    *
    * @param data String to write to buffer.

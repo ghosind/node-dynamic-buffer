@@ -111,6 +111,26 @@ describe('Resize tests', () => {
   });
 });
 
+describe('Subarray test', () => {
+  it('Test subarray', () => {
+    const buf = new DynamicBuffer('ABCDEF');
+    const sub = buf.subarray(1, 3);
+    sub[0] = 67;
+    sub[1] = 66;
+
+    assert.equal(buf.toString(), 'ACBDEF');
+  });
+
+  it('Test subarray with empty buffer', () => {
+    const buf = new DynamicBuffer();
+    const sub = buf.subarray(1, 3);
+    sub[0] = 67;
+    sub[1] = 66;
+
+    assert.equal(buf.toString(), '');
+  });
+});
+
 describe('Tools methods test', () => {
   it('Test isDynamicBuffer util method', () => {
     assert.equal(isDynamicBuffer(Buffer.from('')), false);
