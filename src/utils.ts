@@ -23,3 +23,14 @@ export const rangeCheck = (field: string, value: number, min?: number, max?: num
  * ```
  */
 export const isDynamicBuffer = (val: any) => val instanceof DynamicBuffer;
+
+/**
+ * Swap two element in the buffer.
+ */
+export const swap = (buf: Buffer, i: number, j: number) => {
+  const t = buf[i];
+  // eslint-disable-next-line no-param-reassign
+  buf[i] = buf[j];
+  // eslint-disable-next-line no-param-reassign
+  buf[j] = t;
+};

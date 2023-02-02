@@ -1,7 +1,7 @@
 import { constants } from 'buffer';
 
 import { DynamicBufferIterator } from './iterator';
-import { rangeCheck } from './utils';
+import { rangeCheck, swap } from './utils';
 
 /**
  * The character encoding that is supported by Node.js, copy from Node.js Buffer module.
@@ -735,6 +735,106 @@ export class DynamicBuffer {
     }
 
     return this.buffer.copy(target, targetStart, sourceStart, sourceEnd);
+  }
+
+  /**
+   * Interprets buf as an array of unsigned 16-bit integers and swaps the byte order in-place.
+   *
+   * ```ts
+   * const buf = new DynamicBuffer('ABCDEFGH');
+   * buf.swap16();
+   * console.log(buf.toString());
+   * // BADCFEHG
+   * ```
+   *
+   * @returns A reference to this buffer.
+   */
+  swap16(): DynamicBuffer {
+    if (this.length % 2 !== 0) {
+      throw new RangeError('Buffer size must be a multiple of 2');
+    }
+
+    if (this.length === 0 || !this.buffer) {
+      return this;
+    }
+
+    if (this.length < 128 || typeof this.buffer.swap16 !== 'function') {
+      for (let i = 0; i < this.length; i += 2) {
+        swap(this.buffer, i, i + 1);
+      }
+    } else {
+      this.buffer.subarray(0, this.length).swap16();
+    }
+
+    return this;
+  }
+
+  /**
+   * Interprets buf as an array of unsigned 32-bit integers and swaps the byte order in-place.
+   *
+   * ```ts
+   * const buf = new DynamicBuffer('ABCDEFGH');
+   * buf.swap32();
+   * console.log(buf.toString());
+   * // DCBAHGFE
+   * ```
+   *
+   * @returns A reference to this buffer.
+   */
+  swap32(): DynamicBuffer {
+    if (this.length % 4 !== 0) {
+      throw new RangeError('Buffer size must be a multiple of 4');
+    }
+
+    if (this.length === 0 || !this.buffer) {
+      return this;
+    }
+
+    if (this.length < 192 || typeof this.buffer.swap32 !== 'function') {
+      for (let i = 0; i < this.length; i += 4) {
+        swap(this.buffer, i, i + 3);
+        swap(this.buffer, i + 1, i + 2);
+      }
+    } else {
+      this.buffer.subarray(0, this.length).swap32();
+    }
+
+    return this;
+  }
+
+  /**
+   * Interprets buf as an array of unsigned 64-bit integers and swaps the byte order in-place.
+   *
+   * ```ts
+   * const buf = new DynamicBuffer('ABCDEFGH');
+   * buf.swap64();
+   * console.log(buf.toString());
+   * // HGFEDCBA
+   * ```
+   *
+   * @returns A reference to this buffer.
+   */
+  swap64(): DynamicBuffer {
+    if (this.length % 8 !== 0) {
+      throw new RangeError('Buffer size must be a multiple of 8');
+    }
+
+    if (this.length === 0 || !this.buffer) {
+      return this;
+    }
+
+    if (this.length < 192 || typeof this.buffer.swap32 !== 'function') {
+      for (let i = 0; i < this.length; i += 8) {
+        swap(this.buffer, i, i + 7);
+        swap(this.buffer, i + 1, i + 6);
+        swap(this.buffer, i + 2, i + 5);
+        swap(this.buffer, i + 3, i + 4);
+      }
+    } else {
+      this.buffer.subarray(0, this.length).swap64();
+    }
+
+    return this;
   }
 
   /**
