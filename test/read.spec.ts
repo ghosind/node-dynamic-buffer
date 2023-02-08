@@ -3,6 +3,35 @@ import { describe, it } from 'mocha';
 
 import { DynamicBuffer } from '../src';
 
+describe('Get by index tests', () => {
+  it('Test getting by index with legal ranges', () => {
+    const buffer = new DynamicBuffer();
+    const str = 'Hello world';
+
+    buffer.append(str);
+
+    for (let i = 0; i < str.length; i += 1) {
+      assert.equal(buffer[i], str.charCodeAt(i));
+    }
+  });
+
+  it('Test getting by index with a negative offset', () => {
+    const buffer = new DynamicBuffer();
+
+    buffer.append('Hello world');
+
+    assert.equal(buffer[-1], undefined);
+  });
+
+  it('Test getting by index with a offset larger than buffer length', () => {
+    const buffer = new DynamicBuffer();
+
+    buffer.append('Hello world');
+
+    assert.equal(buffer[buffer.length + 1], undefined);
+  });
+});
+
 describe('Read tests', () => {
   it('Test read without parameter', () => {
     const buffer = new DynamicBuffer();

@@ -87,6 +87,9 @@ export class DynamicBuffer {
    */
   private used: number;
 
+  // eslint-disable-next-line no-undef
+  [index: number]: number | undefined;
+
   /**
    * Create a DynamicBuffer with default settings.
    *
@@ -187,6 +190,20 @@ export class DynamicBuffer {
     if (data) {
       this.append(data);
     }
+
+    // eslint-disable-next-line no-constructor-return
+    return new Proxy(this, {
+      get: (target: this, p: string | symbol, receiver: any) => {
+        if (Reflect.has(target, p)) {
+          return Reflect.get(target, p, receiver);
+        }
+        if (Number(p) >= 0) {
+          return Reflect.apply(Reflect.get(target, 'read', receiver), target, [Number(p)]);
+        }
+
+        return Reflect.get(target, p, receiver);
+      },
+    });
   }
 
   /**
