@@ -29,9 +29,7 @@ describe('Read tests', () => {
 
     buffer.append('Hello world');
 
-    assert.throws(() => {
-      buffer.read(-1);
-    });
+    assert.equal(buffer.read(-1), undefined);
   });
 
   it('Test read with a offset larger than buffer length', () => {
@@ -39,9 +37,7 @@ describe('Read tests', () => {
 
     buffer.append('Hello world');
 
-    assert.throws(() => {
-      buffer.read(buffer.length + 1);
-    });
+    assert.equal(buffer.read(buffer.length + 1), undefined);
   });
 });
 
