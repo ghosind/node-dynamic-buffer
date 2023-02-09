@@ -1,7 +1,7 @@
 import { constants } from 'buffer';
 
 import { DynamicBufferIterator } from './iterator';
-import { rangeCheck, swap } from './utils';
+import { checkRange, swap } from './utils';
 
 /**
  * The character encoding that is supported by Node.js, copy from Node.js Buffer module.
@@ -347,8 +347,8 @@ export class DynamicBuffer {
     sourceStart: number = 0,
     sourceEnd: number = this.length,
   ): number {
-    rangeCheck('targetStart', targetStart, 0);
-    rangeCheck('sourceStart', sourceStart, 0);
+    checkRange('targetStart', targetStart, 0);
+    checkRange('sourceStart', sourceStart, 0);
     if (sourceEnd > this.length) {
       // eslint-disable-next-line no-param-reassign
       sourceEnd = this.length;
@@ -455,8 +455,8 @@ export class DynamicBuffer {
       return this;
     }
 
-    rangeCheck('offset', offset, 0, this.length - 1);
-    rangeCheck('end', end, 0, this.length);
+    checkRange('offset', offset, 0, this.length - 1);
+    checkRange('end', end, 0, this.length);
 
     this.buffer.fill(value, offset, end, encoding);
 
@@ -905,7 +905,7 @@ export class DynamicBuffer {
     encoding: BufferEncoding | undefined = this.encoding,
   ): number {
     if (offset < 0) {
-      rangeCheck('offset', offset, 0);
+      checkRange('offset', offset, 0);
     }
 
     const count = this.writeData(data, offset, length, encoding);

@@ -2,7 +2,7 @@ import assert from 'assert';
 import { describe, it } from 'mocha';
 
 import { DynamicBuffer } from '../src';
-import { isDynamicBuffer, rangeCheck, swap } from '../src/utils';
+import { isDynamicBuffer, checkRange, swap } from '../src/utils';
 
 describe('Method isDynamicBuffer test', () => {
   it('Test isDynamicBuffer util method', () => {
@@ -11,22 +11,22 @@ describe('Method isDynamicBuffer test', () => {
   });
 });
 
-describe('Method rangeCheck test', () => {
-  it('Test rangeCheck', () => {
+describe('Method checkRange test', () => {
+  it('Test checkRange', () => {
     assert.doesNotThrow(() => {
-      rangeCheck('noLimit', 0);
+      checkRange('noLimit', 0);
     });
 
     assert.doesNotThrow(() => {
-      rangeCheck('valid', 0, 0, 5);
+      checkRange('valid', 0, 0, 5);
     });
 
     assert.throws(() => {
-      rangeCheck('less', 0, 5);
+      checkRange('less', 0, 5);
     });
 
     assert.throws(() => {
-      rangeCheck('greater', 10, 0, 5);
+      checkRange('greater', 10, 0, 5);
     });
   });
 });

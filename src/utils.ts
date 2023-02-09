@@ -22,7 +22,7 @@ export const isDynamicBuffer = (val: any) => val instanceof DynamicBuffer;
  * @param min The allowed minimum value (included) of this value.
  * @param max The allowed maximum value (included) of this value.
  */
-export const rangeCheck = (field: string, value: number, min?: number, max?: number) => {
+export const checkRange = (field: string, value: number, min?: number, max?: number) => {
   if (min !== undefined && value < min) {
     throw RangeError(`The value of '${field}' is out of range. It must be >= ${min}. Received ${value}`);
   }
