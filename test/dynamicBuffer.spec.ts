@@ -130,3 +130,45 @@ describe('Subarray test', () => {
     assert.equal(buf.toString(), '');
   });
 });
+
+describe('Fill tests', () => {
+  it('Test fill', () => {
+    const buf = new DynamicBuffer('hello');
+
+    buf.fill('x');
+
+    assert.equal(buf.toString(), 'xxxxx');
+  });
+
+  it('Test fill to empty buffer', () => {
+    const buf = new DynamicBuffer();
+
+    buf.fill('x');
+
+    assert.equal(buf.toString(), '');
+  });
+
+  it('Test fill with empty string', () => {
+    const buf = new DynamicBuffer('hello');
+
+    buf.fill('');
+
+    assert.equal(buf.toString(), '\x00\x00\x00\x00\x00');
+  });
+
+  it('Test fill with specified range', () => {
+    const buf = new DynamicBuffer('hello');
+
+    buf.fill('x', 2, 4);
+
+    assert.equal(buf.toString(), 'hexxo');
+  });
+
+  it('Test fill with invalid range', () => {
+    const buf = new DynamicBuffer('hello');
+
+    assert.throws(() => {
+      buf.fill('x', 2, 10);
+    });
+  });
+});

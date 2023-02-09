@@ -75,7 +75,7 @@ export class DynamicBuffer {
   /**
    * A value to pre-fill the new buffer with.
    */
-  private fill?: string | Buffer | number;
+  private fillVal?: string | Buffer | number;
 
   /**
    * The current size of the buffer.
@@ -175,7 +175,7 @@ export class DynamicBuffer {
     }
 
     this.used = 0;
-    this.fill = options?.fill || 0;
+    this.fillVal = options?.fill || 0;
     this.encoding = options?.encoding || 'utf8';
     this.factor = options?.factor || this.DefaultResizeFactor;
 
@@ -184,7 +184,7 @@ export class DynamicBuffer {
     }
 
     if (this.size > 0) {
-      this.buffer = Buffer.alloc(this.size, this.fill, this.encoding);
+      this.buffer = Buffer.alloc(this.size, this.fillVal, this.encoding);
     }
 
     if (data) {
@@ -426,6 +426,41 @@ export class DynamicBuffer {
    */
   equals(otherBuffer: DynamicBuffer | Buffer | Uint8Array): boolean {
     return this.compare(otherBuffer, 0, otherBuffer.length, 0, this.length) === 0;
+  }
+
+  /**
+   * Fills this buffer with the specified value, and the entire buffer will be filled if the offset
+   * and end are not given.
+   *
+   * ```js
+   * const buf = new DynamicBuffer('hello');
+   * buf.fill('x');
+   * console.log(buf.toString());
+   * // xxxxx
+   * ```
+   *
+   * @param value The value with which to be fill this buffer.
+   * @param offset Number of bytes to skip before starting to fill this buffer, default 0.
+   * @param end Where to stop filling this buffer (not inclusive), default `buf.length`.
+   * @param encoding The encoding for value if value is a string, default `'utf8'`.
+   * @returns A reference to this buffer.
+   */
+  fill(
+    value: string | Buffer | Uint8Array | number,
+    offset: number = 0,
+    end: number = this.length,
+    encoding: BufferEncoding = 'utf8',
+  ): DynamicBuffer {
+    if (!this.buffer || this.length === 0 || end - offset <= 0) {
+      return this;
+    }
+
+    rangeCheck('offset', offset, 0, this.length - 1);
+    rangeCheck('end', end, 0, this.length);
+
+    this.buffer.fill(value, offset, end, encoding);
+
+    return this;
   }
 
   /**
@@ -740,7 +775,7 @@ export class DynamicBuffer {
       return Buffer.alloc(0);
     }
 
-    const newBuffer = Buffer.alloc(endOffset - startOffset, this.fill, this.encoding);
+    const newBuffer = Buffer.alloc(endOffset - startOffset, this.fillVal, this.encoding);
     this.buffer.copy(newBuffer, 0, startOffset, endOffset);
 
     return newBuffer;
@@ -985,7 +1020,7 @@ export class DynamicBuffer {
    * @param newSize The size of new buffer.
    */
   private resize(newSize: number): void {
-    const newBuffer = Buffer.alloc(newSize, this.fill, this.encoding);
+    const newBuffer = Buffer.alloc(newSize, this.fillVal, this.encoding);
 
     if (this.buffer && this.used > 0) {
       this.buffer.copy(newBuffer, 0, 0, this.used);
