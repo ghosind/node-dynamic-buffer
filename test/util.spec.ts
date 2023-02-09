@@ -2,12 +2,33 @@ import assert from 'assert';
 import { describe, it } from 'mocha';
 
 import { DynamicBuffer } from '../src';
-import { isDynamicBuffer, checkRange, swap } from '../src/utils';
+import {
+  isDynamicBuffer,
+  checkBounds,
+  checkRange,
+  swap,
+} from '../src/utils';
 
 describe('Method isDynamicBuffer test', () => {
   it('Test isDynamicBuffer util method', () => {
     assert.equal(isDynamicBuffer(Buffer.from('')), false);
     assert.equal(isDynamicBuffer(new DynamicBuffer()), true);
+  });
+});
+
+describe('Method checkBounds test', () => {
+  it('Test checkBounds', () => {
+    assert.doesNotThrow(() => {
+      checkBounds('valid', 0, 0, 5);
+    });
+
+    assert.throws(() => {
+      checkBounds('less', -5, 0, 5);
+    });
+
+    assert.throws(() => {
+      checkBounds('greater', 10, 0, 5);
+    });
   });
 });
 
