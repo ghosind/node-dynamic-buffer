@@ -209,3 +209,38 @@ describe('Write tests', () => {
     });
   });
 });
+
+describe('Set tests', () => {
+  it('Test set', () => {
+    const buf = new DynamicBuffer('hello');
+
+    buf.set([97], 1);
+
+    assert.equal(buf.toString(), 'hallo');
+  });
+
+  it('Test set of empty buffer', () => {
+    const buf = new DynamicBuffer();
+
+    assert.doesNotThrow(() => {
+      buf.set([]);
+    });
+
+    assert.throws(() => {
+      buf.set([97]);
+    });
+  });
+
+  it('Test set offset parameter', () => {
+    const buf = new DynamicBuffer('xxxxx');
+
+    assert.doesNotThrow(() => {
+      buf.set([97, 98], 3);
+    });
+    assert.equal(buf.toString(), 'xxxab');
+
+    assert.throws(() => {
+      buf.set([97, 98], 4);
+    });
+  });
+});

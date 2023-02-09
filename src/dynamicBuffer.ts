@@ -1,7 +1,7 @@
 import { constants } from 'buffer';
 
 import { DynamicBufferIterator } from './iterator';
-import { checkRange, swap } from './utils';
+import { checkBounds, checkRange, swap } from './utils';
 
 /**
  * The character encoding that is supported by Node.js, copy from Node.js Buffer module.
@@ -623,6 +623,24 @@ export class DynamicBuffer {
     this.buffer.subarray(0, this.length).reverse();
 
     return this;
+  }
+
+  /**
+   * Sets a value or an array of values.
+   *
+   * @param array A typed or untyped array of values to set.
+   * @param offset The index in the current array at which the values are to be written.
+   */
+  set(array: ArrayLike<number>, offset: number = 0): void {
+    if (array.length > 0) {
+      checkBounds('offset', offset, 0, this.length - array.length);
+    }
+
+    if (!this.buffer || this.length <= 0) {
+      return;
+    }
+
+    this.subarray(0, this.length).set(array, offset);
   }
 
   /**
