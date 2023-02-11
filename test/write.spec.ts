@@ -4,6 +4,31 @@ import { describe, it } from 'mocha';
 
 import { DynamicBuffer } from '../src';
 
+describe('Set by index tests', () => {
+  it('Test set by index with valid position', () => {
+    const buffer = new DynamicBuffer('hello world');
+
+    buffer[0] = 72;
+    assert.equal(buffer.toString(), 'Hello world');
+  });
+
+  it('Test getting by index with a negative offset', () => {
+    const buffer = new DynamicBuffer('Hello world');
+
+    buffer[-1] = 33; // !
+
+    assert.equal(buffer.toString(), 'Hello world');
+  });
+
+  it('Test getting by index with a offset larger than buffer length', () => {
+    const buffer = new DynamicBuffer('Hello world');
+
+    buffer[buffer.length] = 33; // !
+
+    assert.equal(buffer.toString(), 'Hello world');
+  });
+});
+
 describe('Append tests', () => {
   it('Test appending string', () => {
     const buffer = new DynamicBuffer();

@@ -4,7 +4,7 @@ import { describe, it } from 'mocha';
 import { DynamicBuffer } from '../src';
 
 describe('Get by index tests', () => {
-  it('Test getting by index with legal ranges', () => {
+  it('Test getting by index with valid position', () => {
     const buffer = new DynamicBuffer();
     const str = 'Hello world';
 

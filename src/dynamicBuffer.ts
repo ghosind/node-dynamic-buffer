@@ -203,6 +203,17 @@ export class DynamicBuffer {
 
         return Reflect.get(target, p, receiver);
       },
+      set: (target: this, p: string | symbol, newValue: any, receiver: any) => {
+        if (Reflect.has(target, p)) {
+          return Reflect.set(target, p, newValue, receiver);
+        }
+        if (Number(p) >= 0) {
+          Reflect.apply(Reflect.get(target, 'writeByte', receiver), target, [newValue, Number(p)]);
+          return true;
+        }
+
+        return Reflect.set(target, p, newValue, receiver);
+      },
     });
   }
 
@@ -1046,6 +1057,20 @@ export class DynamicBuffer {
 
     this.buffer = newBuffer;
     this.size = newSize;
+  }
+
+  /**
+   * Writes data to the specified position in the buffer, and skip if out of used range.
+   *
+   * @param data Data to write to buffer.
+   * @param offset The position to write data.
+   */
+  private writeByte(data: any, offset: number) {
+    if (!this.buffer || this.length === 0 || offset >= this.length) {
+      return;
+    }
+
+    this.buffer[offset] = data;
   }
 
   /**
