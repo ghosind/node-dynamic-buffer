@@ -48,6 +48,7 @@ describe('Export string tests', () => {
     const buffer = new DynamicBuffer();
 
     assert.equal(buffer.toString(), '');
+    assert.equal(buffer.toLocaleString(), '');
   });
 
   it('Test toString() without parameters', () => {
@@ -56,6 +57,7 @@ describe('Export string tests', () => {
     buffer.append('Hello world');
 
     assert.equal(buffer.toString(), 'Hello world');
+    assert.equal(buffer.toLocaleString(), 'Hello world');
   });
 
   it('Test toString() with start parameter only', () => {
@@ -71,7 +73,7 @@ describe('Export string tests', () => {
 
     buffer.append('Hello world');
 
-    assert.equal(buffer.toString('utf8', 20).toString(), '');
+    assert.equal(buffer.toString('utf8', 20), '');
   });
 
   it('Test toString() with large end parameter', () => {
@@ -79,7 +81,7 @@ describe('Export string tests', () => {
 
     buffer.append('Hello world');
 
-    assert.equal(buffer.toString('utf8', 0, 100).toString(), 'Hello world');
+    assert.equal(buffer.toString('utf8', 0, 100), 'Hello world');
   });
 
   it('Test toString() with same start and end parameters', () => {

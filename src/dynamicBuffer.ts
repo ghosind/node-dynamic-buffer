@@ -841,6 +841,15 @@ export class DynamicBuffer {
   }
 
   /**
+   * The alias of toString().
+   *
+   * @returns The string decodes from buffer
+   */
+  toLocaleString() {
+    return this.toString();
+  }
+
+  /**
    * Decodes buffer to a string with the specified character encoding and range.
    *
    * ```js
