@@ -440,6 +440,26 @@ export class DynamicBuffer {
   }
 
   /**
+   * Determines whether all the bytes of the buffer satisfy the specified test.
+   *
+   * @param predicate A function that accepts up to three arguments. The every method calls the
+   * predicate function for each byte in the buffer until the predicate returns a value which is
+   * coercible to the Boolean value false, or until the end of the buffer.
+   * @param thisArg An object to which the this keyword can refer in the predicate function. If
+   * thisArg is omitted, undefined is used as the this value.
+   */
+  every(
+    predicate: (value: number, index: number, array: Uint8Array) => unknown,
+    thisArg?: any,
+  ): boolean {
+    if (!this.buffer || this.length <= 0) {
+      return true;
+    }
+
+    return this.buffer.subarray(0, this.length).every(predicate, thisArg);
+  }
+
+  /**
    * Fills this buffer with the specified value, and the entire buffer will be filled if the offset
    * and end are not given.
    *
@@ -472,6 +492,85 @@ export class DynamicBuffer {
     this.buffer.fill(value, offset, end, encoding);
 
     return this;
+  }
+
+  /**
+   * Returns the bytes of an array that meet the condition specified in a callback function.
+   *
+   * @param predicate A function that accepts up to three arguments. The filter method calls
+   * the predicate function one time for each byte in the buffer.
+   * @param thisArg An object to which the this keyword can refer in the predicate function.
+   * If thisArg is omitted, undefined is used as the this value.
+   */
+  filter(
+    predicate: (value: number, index: number, array: Uint8Array) => any,
+    thisArg?: any,
+  ): Uint8Array {
+    if (!this.buffer || this.length === 0) {
+      return new Uint8Array(0);
+    }
+
+    return this.buffer.subarray(0, this.length).filter(predicate, thisArg);
+  }
+
+  /**
+   * Returns the value of the first byte in the buffer where predicate is true, and undefined
+   * otherwise.
+   *
+   * @param predicate find calls predicate once for each byte of the buffer, in ascending order,
+   * until it finds one where predicate returns true. If such a byte is found, find immediately
+   * returns that byte. Otherwise, find returns undefined.
+   * @param thisArg If provided, it will be used as the this value for each invocation of
+   * predicate. If it is not provided, undefined is used instead.
+   */
+  find(
+    predicate: (value: number, index: number, obj: Uint8Array) => boolean,
+    thisArg?: any,
+  ): number | undefined {
+    if (!this.buffer || this.length === 0) {
+      return undefined;
+    }
+
+    return this.buffer.subarray(0, this.length).find(predicate, thisArg);
+  }
+
+  /**
+   * Returns the index of the first byte in the buffer where predicate is true, and -1 otherwise.
+   *
+   * @param predicate find calls predicate once for each byte of the buffer, in ascending order,
+   * until it finds one where predicate returns true. If such a byte is found, findIndex
+   * immediately returns that byte position. Otherwise, findIndex returns -1.
+   * @param thisArg If provided, it will be used as the this value for each invocation of
+   * predicate. If it is not provided, undefined is used instead.
+   */
+  findIndex(
+    predicate: (value: number, index: number, obj: Uint8Array) => boolean,
+    thisArg?: any,
+  ): number {
+    if (!this.buffer || this.length === 0) {
+      return -1;
+    }
+
+    return this.buffer.subarray(0, this.length).findIndex(predicate, thisArg);
+  }
+
+  /**
+   * Performs the specified action for each byte in the buffer.
+   *
+   * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn
+   * function one time for each byte in the buffer.
+   * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If
+   * thisArg is omitted, undefined is used as the this value.
+   */
+  forEach(
+    callbackfn: (value: number, index: number, array: Uint8Array) => void,
+    thisArg?: any,
+  ): void {
+    if (!this.buffer || this.length === 0) {
+      return;
+    }
+
+    this.buffer.subarray(0, this.length).forEach(callbackfn, thisArg);
   }
 
   /**
@@ -524,6 +623,20 @@ export class DynamicBuffer {
     encoding: BufferEncoding = 'utf8',
   ): number {
     return this.indexOfWithDir(true, value, byteOffset, encoding);
+  }
+
+  /**
+   * Adds all the bytes of the buffer separated by the specified separator string.
+   *
+   * @param separator A string used to separate one byte of the buffer from the next in the
+   * resulting String. If omitted, the bytes are separated with a comma.
+   */
+  join(separator?: string): string {
+    if (!this.buffer || this.length === 0) {
+      return '';
+    }
+
+    return this.buffer.subarray(0, this.length).join(separator);
   }
 
   /**
@@ -593,6 +706,26 @@ export class DynamicBuffer {
   }
 
   /**
+   * Calls a defined callback function on each byte of the buffer, and returns an array that
+   * contains the results.
+   *
+   * @param callbackfn A function that accepts up to three arguments. The map method calls the
+   * callbackfn function one time for each byte in the buffer.
+   * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+   * If thisArg is omitted, undefined is used as the this value.
+   */
+  map(
+    callbackfn: (value: number, index: number, array: Uint8Array) => number,
+    thisArg?: any,
+  ): Uint8Array {
+    if (!this.buffer || this.length === 0) {
+      return new Uint8Array(0);
+    }
+
+    return this.buffer.subarray(0, this.length).map(callbackfn, thisArg);
+  }
+
+  /**
    * Reads and returns a byte at the position `offset` in this buffer.
    *
    * ```js
@@ -652,6 +785,49 @@ export class DynamicBuffer {
     }
 
     this.subarray(0, this.length).set(array, offset);
+  }
+
+  /**
+   * Determines whether the specified callback function returns true for any byte of the buffer.
+   *
+   * @param predicate A function that accepts up to three arguments. The some method calls the
+   * predicate function for each byte in the buffer until the predicate returns a value which is
+   * coercible to the Boolean value true, or until the end of the buffer.
+   * @param thisArg An object to which the this keyword can refer in the predicate function.
+   * If thisArg is omitted, undefined is used as the this value.
+   */
+  some(
+    predicate: (value: number, index: number, array: Uint8Array) => unknown,
+    thisArg?: any,
+  ): boolean {
+    if (!this.buffer || this.length === 0) {
+      return false;
+    }
+
+    return this.buffer.subarray(0, this.length).some(predicate, thisArg);
+  }
+
+  /**
+   * Sorts all bytes in the buffer.
+   *
+   * ```js
+   * const buf = new DynamicBuffer('cba');
+   * buf.sort();
+   * console.log(buf.toString());
+   * // abc
+   * ```
+   *
+   * @param compareFn Function used to determine the order of the elements. It is expected to
+   * return a negative value if first argument is less than second argument, zero if they're
+   * equal and a positive value otherwise. If omitted, the elements are sorted in ascending order.
+   * @returns The reference of this buffer.
+   */
+  sort(compareFn?: (a: number, b: number) => number): this {
+    if (this.buffer && this.length > 0) {
+      this.buffer.subarray(0, this.length).sort(compareFn);
+    }
+
+    return this;
   }
 
   /**
@@ -841,7 +1017,14 @@ export class DynamicBuffer {
   }
 
   /**
-   * The alias of toString().
+   * Decodes buffer to a string with the specified character encoding and range. It's an alias of
+   * toString().
+   *
+   * ```js
+   * const buf = new DynamicBuffer('hello');
+   * console.log(buf.toLocaleString());
+   * // hello
+   * ```
    *
    * @returns The string decodes from buffer
    */
