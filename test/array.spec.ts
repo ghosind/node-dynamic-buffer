@@ -122,6 +122,106 @@ describe('Map tests', () => {
   });
 });
 
+describe('Reduce tests', () => {
+  it('Reduce buffer', () => {
+    const buf = new DynamicBuffer('abc');
+
+    const ret = buf.reduce((prev, cur) => prev + (cur - 97));
+
+    assert.equal(ret, 100);
+  });
+
+  it('Reduce buffer with initial value', () => {
+    const buf = new DynamicBuffer('abc');
+
+    const ret = buf.reduce((prev, cur) => prev + (cur - 97), 0);
+
+    assert.equal(ret, 3);
+  });
+
+  it('Reduce buffer with other type', () => {
+    const buf = new DynamicBuffer('abc');
+
+    const ret = buf.reduce((prev, cur) => {
+      const obj: any = { ...prev };
+      obj[String.fromCharCode(cur)] = cur;
+      return obj;
+    }, {});
+
+    assert.deepEqual(ret, {
+      a: 97,
+      b: 98,
+      c: 99,
+    });
+  });
+
+  it('Reduce empty buffer without initial value', () => {
+    const buf = new DynamicBuffer();
+
+    assert.throws(() => {
+      buf.reduce((prev, cur) => prev + (cur - 97));
+    });
+  });
+
+  it('Reduce empty buffer with initial value', () => {
+    const buf = new DynamicBuffer();
+
+    const ret = buf.reduce((prev, cur) => prev + (cur - 97), 0);
+
+    assert.equal(ret, 0);
+  });
+});
+
+describe('ReduceRight tests', () => {
+  it('ReduceRight buffer', () => {
+    const buf = new DynamicBuffer('abc');
+
+    const ret = buf.reduceRight((prev, cur) => prev + (cur - 97));
+
+    assert.equal(ret, 100);
+  });
+
+  it('ReduceRight buffer with initial value', () => {
+    const buf = new DynamicBuffer('abc');
+
+    const ret = buf.reduceRight((prev, cur) => prev + (cur - 97), 0);
+
+    assert.equal(ret, 3);
+  });
+
+  it('ReduceRight buffer with other type', () => {
+    const buf = new DynamicBuffer('abc');
+
+    const ret = buf.reduceRight((prev, cur) => {
+      const obj: any = { ...prev };
+      obj[String.fromCharCode(cur)] = cur;
+      return obj;
+    }, {});
+
+    assert.deepEqual(ret, {
+      a: 97,
+      b: 98,
+      c: 99,
+    });
+  });
+
+  it('ReduceRight empty buffer without initial value', () => {
+    const buf = new DynamicBuffer();
+
+    assert.throws(() => {
+      buf.reduceRight((prev, cur) => prev + (cur - 97));
+    });
+  });
+
+  it('ReduceRight empty buffer with initial value', () => {
+    const buf = new DynamicBuffer();
+
+    const ret = buf.reduceRight((prev, cur) => prev + (cur - 97), 0);
+
+    assert.equal(ret, 0);
+  });
+});
+
 describe('Reverse tests', () => {
   it('Reverse buffer', () => {
     const buf = new DynamicBuffer('hello');

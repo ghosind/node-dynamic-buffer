@@ -746,6 +746,132 @@ export class DynamicBuffer {
   }
 
   /**
+   * Calls the specified callback function for all the bytes in an buffer. The return value of
+   * the callback function is the accumulated result, and is provided as an argument in the next
+   * call to the callback function.
+   *
+   * @param callbackfn A function that accepts up to four arguments. The reduce method calls the
+   * callbackfn function one time for each byte in the buffer.
+   * @param initialValue If initialValue is specified, it is used as the initial value to start
+   * the accumulation. The first call to the callbackfn function provides this value as an argument
+   * instead of a byte value.
+   */
+  reduce(
+    callbackfn: (
+      previousValue: number,
+      currentValue: number,
+      currentIndex: number,
+      array: Uint8Array,
+    ) => number,
+  ): number;
+
+  reduce(
+    callbackfn: (
+      previousValue: number,
+      currentValue: number,
+      currentIndex: number,
+      array: Uint8Array,
+    ) => number,
+    initialValue: number,
+  ): number;
+
+  reduce<T>(
+    callbackfn: (
+      previousValue: T,
+      currentValue: number,
+      currentIndex: number,
+      array: Uint8Array,
+    ) => T,
+    initialValue: T,
+  ): T;
+
+  reduce(
+    callbackfn: (
+      previousValue: any,
+      currentValue: number,
+      currentIndex: number,
+      array: Uint8Array,
+    ) => any,
+    initialValue?: any,
+  ): any {
+    if (!this.buffer || this.length <= 0) {
+      if (initialValue === undefined) {
+        throw new TypeError('Reduce of empty buffer with no initial value');
+      }
+
+      return initialValue;
+    }
+
+    if (initialValue !== undefined) {
+      return this.buffer.subarray(0, this.length).reduce(callbackfn, initialValue);
+    }
+    return this.buffer.subarray(0, this.length).reduce(callbackfn);
+  }
+
+  /**
+   * Calls the specified callback function for all the bytes in the buffer, in descending order.
+   * The return value of the callback function is the accumulated result, and is provided as an
+   * argument in the next call to the callback function.
+   *
+   * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls
+   * the callbackfn function one time for each byte in the buffer.
+   * @param initialValue If initialValue is specified, it is used as the initial value to start
+   * the accumulation. The first call to the callbackfn function provides this value as an
+   * argument instead of a byte value.
+   */
+  reduceRight(
+    callbackfn: (
+      previousValue: number,
+      currentValue: number,
+      currentIndex: number,
+      array: Uint8Array,
+    ) => number,
+  ): number;
+
+  reduceRight(
+    callbackfn: (
+      previousValue: number,
+      currentValue: number,
+      currentIndex: number,
+      array: Uint8Array,
+    ) => number,
+    initialValue: number,
+  ): number;
+
+  reduceRight<T>(
+    callbackfn: (
+      previousValue: T,
+      currentValue: number,
+      currentIndex: number,
+      array: Uint8Array,
+    ) => T,
+    initialValue: T,
+  ): T;
+
+  reduceRight(
+    callbackfn: (
+      previousValue: any,
+      currentValue: number,
+      currentIndex: number,
+      array: Uint8Array,
+    ) => any,
+    initialValue?: any,
+  ): any {
+    if (!this.buffer || this.length <= 0) {
+      if (initialValue === undefined) {
+        throw new TypeError('ReduceRight of empty buffer with no initial value');
+      }
+
+      return initialValue;
+    }
+
+    if (initialValue !== undefined) {
+      return this.buffer.subarray(0, this.length).reduceRight(callbackfn, initialValue);
+    }
+    return this.buffer.subarray(0, this.length).reduceRight(callbackfn);
+  }
+
+  /**
    * Reverses the buffer in place and returns the reference to the buffer. The first byte in the
    * buffer now becoming the last, and the last byte in the buffer becoming the first.
    *
