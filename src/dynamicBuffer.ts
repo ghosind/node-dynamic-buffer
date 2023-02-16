@@ -377,6 +377,26 @@ export class DynamicBuffer {
   }
 
   /**
+   * Returns the this buffer after copying a section of the buffer identified by start and end
+   * to the same buffer starting at position target.
+   *
+   * @param target If target is negative, it is treated as length+target where length is the
+   * length of the array.
+   * @param start If start is negative, it is treated as length+start. If end is negative, it
+   * is treated as length+end.
+   * @param end If not specified, length of the this object is used as its default value.
+   */
+  copyWithin(target: number, start: number, end: number = this.length): DynamicBuffer {
+    if (!this.buffer || this.length === 0) {
+      return this;
+    }
+
+    this.buffer.subarray(0, this.length).copyWithin(target, start, end);
+
+    return this;
+  }
+
+  /**
    * Creates and returns an iterator of key(index) and value(byte) pairs from this buffer.
    *
    * ```js

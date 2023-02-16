@@ -3,6 +3,21 @@ import { describe, it } from 'mocha';
 
 import { DynamicBuffer } from '../src';
 
+describe('CopyWithin tests', () => {
+  it('Test copyWithin', () => {
+    const buf = new DynamicBuffer('abcde');
+
+    assert.equal(buf.copyWithin(0, 3, 4).toString(), 'dbcde');
+    assert.equal(buf.copyWithin(1, 3).toString(), 'ddede');
+  });
+
+  it('Test copyWithin of empty buffer', () => {
+    const buf = new DynamicBuffer();
+
+    assert.equal(buf.copyWithin(0, 3, 4).toString(), '');
+  });
+});
+
 describe('Every tests', () => {
   it('Test every', () => {
     const buf1 = new DynamicBuffer('hello');
