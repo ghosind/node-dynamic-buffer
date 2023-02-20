@@ -40,7 +40,6 @@
   "files": [
     "src",
     "lib",
-    "test",
     "LICENSE",
     "README.md",
     "package.json",
