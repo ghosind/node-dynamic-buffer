@@ -24,7 +24,11 @@ export const isDynamicBuffer = (val: any) => val instanceof DynamicBuffer;
  * @param max The allowed maximum value (included) of this value.
  */
 export const checkBounds = (field: string, value: number, min: number, max: number) => {
-  if (value < min || value > max) {
+  if (typeof value !== 'number') {
+    throw new TypeError(`${field} must be a number`);
+  }
+
+  if (Number.isNaN(value) || value < min || value > max) {
     throw new RangeError(`${field} is out of bounds`);
   }
 };
@@ -38,12 +42,35 @@ export const checkBounds = (field: string, value: number, min: number, max: numb
  * @param max The allowed maximum value (included) of this value.
  */
 export const checkRange = (field: string, value: number, min?: number, max?: number) => {
-  if (min !== undefined && value < min) {
-    throw new RangeError(`The value of '${field}' is out of range. It must be >= ${min}. Received ${value}`);
+  if (typeof value !== 'number') {
+    throw new TypeError(`${field} must be a number`);
   }
 
-  if (max !== undefined && value > max) {
-    throw new RangeError(`The value of '${field}' is out of range. It must be <= ${max}. Received ${value}`);
+  const ranges: string[] = [];
+  let isValid: boolean = true;
+
+  if (min !== undefined) {
+    ranges.push(`>= ${min}`);
+    if (value < min) {
+      isValid = false;
+    }
+  }
+
+  if (max !== undefined) {
+    ranges.push(`<= ${max}`);
+    if (isValid && value > max) {
+      isValid = false;
+    }
+  }
+
+  if (!isValid || Number.isNaN(value)) {
+    throw new RangeError(`The value of '${
+      field
+    }' is out of range. It must be ${
+      ranges.join(' and ')
+    }. Received ${
+      value
+    }`);
   }
 };
 

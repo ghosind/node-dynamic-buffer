@@ -18,6 +18,11 @@ describe('Method isDynamicBuffer test', () => {
 
 describe('Method checkBounds test', () => {
   it('Test checkBounds', () => {
+    assert.throws(() => {
+      // @ts-ignore
+      checkBounds('notNumber', 'test', 0, 5);
+    });
+
     assert.doesNotThrow(() => {
       checkBounds('valid', 0, 0, 5);
     });
@@ -29,11 +34,20 @@ describe('Method checkBounds test', () => {
     assert.throws(() => {
       checkBounds('greater', 10, 0, 5);
     });
+
+    assert.throws(() => {
+      checkBounds('NaN', NaN, 0, 5);
+    });
   });
 });
 
 describe('Method checkRange test', () => {
   it('Test checkRange', () => {
+    assert.throws(() => {
+      // @ts-ignore
+      checkRange('notNum', 'test');
+    });
+
     assert.doesNotThrow(() => {
       checkRange('noLimit', 0);
     });
@@ -48,6 +62,10 @@ describe('Method checkRange test', () => {
 
     assert.throws(() => {
       checkRange('greater', 10, 0, 5);
+    });
+
+    assert.throws(() => {
+      checkRange('NaN', NaN, 0, 5);
     });
   });
 });
