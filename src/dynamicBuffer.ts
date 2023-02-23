@@ -766,6 +766,392 @@ export class DynamicBuffer {
   }
 
   /**
+   * Reads a signed, big-dian 64-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 8`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readBigInt64BE(offset: number = 0): BigInt {
+    if (!this.buffer || this.length < 8) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 8);
+
+    return this.buffer.readBigInt64BE(offset);
+  }
+
+  /**
+   * Reads a signed, little-dian 64-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 8`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readBigInt64LE(offset: number = 0): BigInt {
+    if (!this.buffer || this.length < 8) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 8);
+
+    return this.buffer.readBigInt64LE(offset);
+  }
+
+  /**
+   * Reads an unsigned, big-dian 64-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 8`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readBigUInt64BE(offset: number = 0): BigInt {
+    if (!this.buffer || this.length < 8) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 8);
+
+    return this.buffer.readBigUInt64BE(offset);
+  }
+
+  /**
+   * Reads an unsigned, little-dian 64-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 8`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readBigUInt64LE(offset: number = 0): BigInt {
+    if (!this.buffer || this.length < 8) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 8);
+
+    return this.buffer.readBigUInt64LE(offset);
+  }
+
+  /**
+   * Reads a 64-bit, big-endian double from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 8`, default `0`.
+   * @returns Double-precision floating-point number read from the buffer at the specified offset.
+   */
+  readDoubleBE(offset: number = 0): number {
+    if (!this.buffer || this.length < 8) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 8);
+
+    return this.buffer.readDoubleBE(offset);
+  }
+
+  /**
+   * Reads a 64-bit, little-endian double from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 8`, default `0`.
+   * @returns Double-precision floating-point number read from the buffer at the specified offset.
+   */
+  readDoubleLE(offset: number = 0): number {
+    if (!this.buffer || this.length < 8) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 8);
+
+    return this.buffer.readDoubleLE(offset);
+  }
+
+  /**
+   * Reads a 32-bit, big-endian double from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 4`, default `0`.
+   * @returns Single-precision floating-point number read from the buffer at the specified offset.
+   */
+  readFloatBE(offset: number = 0): number {
+    if (!this.buffer || this.length < 4) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 4);
+
+    return this.buffer.readFloatBE(offset);
+  }
+
+  /**
+   * Reads a 32-bit, little-endian double from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 4`, default `0`.
+   * @returns Single-precision floating-point number read from the buffer at the specified offset.
+   */
+  readFloatLE(offset: number = 0): number {
+    if (!this.buffer || this.length < 4) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 4);
+
+    return this.buffer.readFloatLE(offset);
+  }
+
+  /**
+   * Reads a signed 8-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 1`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readInt8(offset: number = 0): number {
+    if (!this.buffer || this.length < 1) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 1);
+
+    return this.buffer.readInt8(offset);
+  }
+
+  /**
+   * Reads a signed, big-endian 16-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 2`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readInt16BE(offset: number = 0): number {
+    if (!this.buffer || this.length < 2) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 2);
+
+    return this.buffer.readInt16BE(offset);
+  }
+
+  /**
+   * Reads a signed, little-endian 16-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 2`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readInt16LE(offset: number = 0): number {
+    if (!this.buffer || this.length < 2) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 2);
+
+    return this.buffer.readInt16LE(offset);
+  }
+
+  /**
+   * Reads a signed, big-endian 32-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 4`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readInt32BE(offset: number = 0): number {
+    if (!this.buffer || this.length < 4) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 4);
+
+    return this.buffer.readInt32BE(offset);
+  }
+
+  /**
+   * Reads a signed, little-endian 32-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 4`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readInt32LE(offset: number = 0): number {
+    if (!this.buffer || this.length < 4) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 4);
+
+    return this.buffer.readInt32LE(offset);
+  }
+
+  /**
+   * Reads `byteLength` number of bytes from the `buf` at the specified `offset` and interprets the
+   * result as a big-endian, two's complement signed value supporting up to 48 bits of accuracy.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - byteLength`.
+   * @param byteLength Number of bytes to read, and it must satisfy `0 < byteLength <= 6`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readIntBE(offset: number, byteLength: number): number {
+    if (!this.buffer || this.length < byteLength) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('byteLength', byteLength, 1, 6);
+    checkRange('offset', offset, 0, this.length - byteLength);
+
+    return this.buffer.readIntBE(offset, byteLength);
+  }
+
+  /**
+   * Reads `byteLength` number of bytes from the `buf` at the specified `offset` and interprets the
+   * result as a little-endian, two's complement signed value supporting up to 48 bits of accuracy.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - byteLength`.
+   * @param byteLength Number of bytes to read, and it must satisfy `0 < byteLength <= 6`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readIntLE(offset: number, byteLength: number) {
+    if (!this.buffer || this.length < byteLength) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('byteLength', byteLength, 1, 6);
+    checkRange('offset', offset, 0, this.length - byteLength);
+
+    return this.buffer.readIntLE(offset, byteLength);
+  }
+
+  /**
+   * Reads an unsigned 8-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 1`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readUInt8(offset: number = 0): number {
+    if (!this.buffer || this.length < 1) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 1);
+
+    return this.buffer.readUInt8(offset);
+  }
+
+  /**
+   * Reads an unsigned, big-endian 16-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 2`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readUInt16BE(offset: number = 0): number {
+    if (!this.buffer || this.length < 2) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 2);
+
+    return this.buffer.readUInt16BE(offset);
+  }
+
+  /**
+   * Reads an unsigned, little-endian 16-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 2`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readUInt16LE(offset: number = 0): number {
+    if (!this.buffer || this.length < 2) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 2);
+
+    return this.buffer.readUInt16LE(offset);
+  }
+
+  /**
+   * Reads an unsigned, big-endian 32-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 4`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readUInt32BE(offset: number = 0): number {
+    if (!this.buffer || this.length < 4) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 4);
+
+    return this.buffer.readUInt32BE(offset);
+  }
+
+  /**
+   * Reads an unsigned, little-endian 32-bit integer from `buf` at the specified `offset`.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - 4`, default `0`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readUInt32LE(offset: number = 0): number {
+    if (!this.buffer || this.length < 4) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('offset', offset, 0, this.length - 4);
+
+    return this.buffer.readUInt32LE(offset);
+  }
+
+  /**
+   * Reads `byteLength` number of bytes from the `buf` at the specified `offset` and interprets the
+   * result as an unsigned big-endian integer supporting up to 48 bits of accuracy.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - byteLength`.
+   * @param byteLength Number of bytes to read, and it must satisfy `0 < byteLength <= 6`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readUIntBE(offset: number, byteLength: number): number {
+    if (!this.buffer || this.length < byteLength) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('byteLength', byteLength, 1, 6);
+    checkRange('offset', offset, 0, this.length - byteLength);
+
+    return this.buffer.readUIntBE(offset, byteLength);
+  }
+
+  /**
+   * Reads `byteLength` number of bytes from the `buf` at the specified `offset` and interprets the
+   * result as an unsigned little-endian integer supporting up to 48 bits of accuracy.
+   *
+   * @param offset Number of bytes to skip before starting to read, and it must between `0` and
+   * `buf.length - byteLength`.
+   * @param byteLength Number of bytes to read, and it must satisfy `0 < byteLength <= 6`.
+   * @returns Integer read from the buffer at the specified offset.
+   */
+  readUIntLE(offset: number, byteLength: number): number {
+    if (!this.buffer || this.length < byteLength) {
+      throw new RangeError('Attempt to access memory outside buffer bounds');
+    }
+
+    checkRange('byteLength', byteLength, 1, 6);
+    checkRange('offset', offset, 0, this.length - byteLength);
+
+    return this.buffer.readUIntLE(offset, byteLength);
+  }
+
+  /**
    * Calls the specified callback function for all the bytes in an buffer. The return value of
    * the callback function is the accumulated result, and is provided as an argument in the next
    * call to the callback function.
