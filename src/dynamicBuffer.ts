@@ -1790,11 +1790,14 @@ export class DynamicBuffer {
    * @param offset The position to write data.
    */
   private writeByte(data: any, offset: number) {
-    if (!this.buffer || this.length === 0 || offset >= this.length) {
-      return;
-    }
+    this.ensureSize(offset + 1);
 
+    // @ts-ignore
     this.buffer[offset] = data;
+
+    if (offset >= this.used) {
+      this.used = offset + 1;
+    }
   }
 
   /**

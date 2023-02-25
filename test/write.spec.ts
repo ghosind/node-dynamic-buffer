@@ -14,8 +14,8 @@ describe('Set by index tests', () => {
     buffer[-1] = 33; // !
     assert.equal(buffer.toString(), 'Hello world');
 
-    buffer[buffer.length] = 33; // !
-    assert.equal(buffer.toString(), 'Hello world');
+    buffer[buffer.length] = 33; // auto-resize
+    assert.equal(buffer.toString(), 'Hello world!');
   });
 });
 
