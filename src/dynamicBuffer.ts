@@ -1015,7 +1015,7 @@ export class DynamicBuffer {
    * @param byteLength Number of bytes to read, and it must satisfy `0 < byteLength <= 6`.
    * @returns Integer read from the buffer at the specified offset.
    */
-  readIntLE(offset: number, byteLength: number) {
+  readIntLE(offset: number, byteLength: number): number {
     if (!this.buffer || this.length < byteLength) {
       throw new RangeError('Attempt to access memory outside buffer bounds');
     }
