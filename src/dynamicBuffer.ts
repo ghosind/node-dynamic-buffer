@@ -250,7 +250,7 @@ export class DynamicBuffer {
     length?: number,
     encoding?: BufferEncoding,
   ): number {
-    const count = this.writeData(data, this.used, length, encoding);
+    const count = this.writeString(data, this.used, length, encoding);
     this.used += count;
 
     return count;
@@ -1661,7 +1661,7 @@ export class DynamicBuffer {
       checkRange('offset', offset, 0);
     }
 
-    const count = this.writeData(data, offset, length, encoding);
+    const count = this.writeString(data, offset, length, encoding);
     this.used = offset + count;
 
     return count;
@@ -1784,7 +1784,7 @@ export class DynamicBuffer {
   }
 
   /**
-   * Writes data to the specified position in the buffer, and skip if out of used range.
+   * Writes a byte to the specified position in the buffer, and skip if out of used range.
    *
    * @param data Data to write to buffer.
    * @param offset The position to write data.
@@ -1801,7 +1801,7 @@ export class DynamicBuffer {
   }
 
   /**
-   * Write data into internal buffer with the specified offset.
+   * Write a string into internal buffer with the specified offset.
    *
    * @param data String to write to buffer.
    * @param offset Number of bytes to skip before starting to write data.
@@ -1809,7 +1809,7 @@ export class DynamicBuffer {
    * @param encoding The character encoding to use, default from buffer encoding.
    * @returns Number of bytes written.
    */
-  private writeData(
+  private writeString(
     data: string,
     offset: number,
     length?: number,
