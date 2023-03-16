@@ -66,13 +66,7 @@ describe('At tests', () => {
 
 describe('More read test', () => {
   it('Test read big int from buffer', () => {
-    const buf = new DynamicBuffer();
-
-    buf[4] = 0xff;
-    buf[5] = 0xff;
-    buf[6] = 0xff;
-    buf[7] = 0xff;
-    // 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
+    const buf = new DynamicBuffer(new Uint8Array([0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff]));
 
     assert.equal(buf.readBigInt64BE(), 4294967295n);
     assert.equal(buf.readBigInt64LE(), -4294967296n);
@@ -94,13 +88,7 @@ describe('More read test', () => {
   });
 
   it('Test read int from buffer', () => {
-    const buf = new DynamicBuffer();
-    buf[0] = 0x12;
-    buf[1] = 0x34;
-    buf[2] = 0x56;
-    buf[3] = 0x78;
-    buf[4] = 0x90;
-    buf[5] = 0xab;
+    const buf = new DynamicBuffer(new Uint8Array([0x12, 0x34, 0x56, 0x78, 0x90, 0xab]));
 
     const be = [0x12, 0x1234, 0x123456, 0x12345678, 0x1234567890, 0x1234567890ab];
     const le = [0x12, 0x3412, 0x563412, 0x78563412, 0x9078563412, 0xab9078563412];

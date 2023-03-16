@@ -47,6 +47,18 @@ describe('Initialization tests', () => {
     assert.equal(buffer.toString(), data);
   });
 
+  it('Test initializing with a buffer', () => {
+    const buffer = new DynamicBuffer(Buffer.from([72, 101, 108, 108, 111]));
+
+    assert.equal(buffer.toString(), 'Hello');
+  });
+
+  it('Test initializing with an Uint8Array', () => {
+    const buffer = new DynamicBuffer(new Uint8Array([72, 101, 108, 108, 111]));
+
+    assert.equal(buffer.toString(), 'Hello');
+  });
+
   it('Test initializing with initial data and initial size', () => {
     const data = 'Hello world';
     const buffer = new DynamicBuffer(data, { size: 4 });

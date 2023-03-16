@@ -129,7 +129,7 @@ export class DynamicBuffer {
    *
    * @param data Initial data in the buffer.
    */
-  constructor(data: string);
+  constructor(data: string | Buffer | Uint8Array);
 
   /**
    * Create a DynamicBuffer with initial data and the specific settings.
@@ -147,16 +147,16 @@ export class DynamicBuffer {
    * @param data Initial data in the buffer.
    * @param options Buffer settings.
    */
-  constructor(data: string, options: DynamicBufferOptions);
+  constructor(data: string | Buffer | Uint8Array, options: DynamicBufferOptions);
 
   constructor(
-    data?: string | DynamicBufferOptions,
+    data?: string | Buffer | Uint8Array | DynamicBufferOptions,
     options?: DynamicBufferOptions,
   ) {
-    let initData: string | undefined;
+    let initData: string | Buffer | Uint8Array | undefined;
     let initOptions: DynamicBufferOptions | undefined;
 
-    if (typeof data === 'string') {
+    if (typeof data === 'string' || (typeof data === 'object' && (data instanceof Buffer || data instanceof Uint8Array))) {
       initData = data;
       initOptions = options;
     } else {
@@ -191,7 +191,12 @@ export class DynamicBuffer {
     }
 
     if (initData) {
-      this.append(initData);
+      if (typeof initData === 'string') {
+        this.append(initData);
+      } else {
+        this.buffer?.set(initData);
+        this.used = initData.length;
+      }
     }
 
     // eslint-disable-next-line no-constructor-return
