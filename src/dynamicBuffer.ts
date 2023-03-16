@@ -27,7 +27,7 @@ export interface DynamicBufferOptions {
   fill?: string | Buffer | number;
 
   /**
-   * The initial size of the buffer, default 16.
+   * The initial size of the buffer, and it must greater than 0, default 16.
    */
   size?: number;
 }
@@ -153,21 +153,24 @@ export class DynamicBuffer {
     data?: string | DynamicBufferOptions,
     options?: DynamicBufferOptions,
   ) {
-    if (typeof data !== 'string') {
-      // eslint-disable-next-line no-param-reassign
-      options = data;
-      // eslint-disable-next-line no-param-reassign
-      data = undefined;
+    let initData: string | undefined;
+    let initOptions: DynamicBufferOptions | undefined;
+
+    if (typeof data === 'string') {
+      initData = data;
+      initOptions = options;
+    } else {
+      initOptions = data;
     }
 
-    if (options?.size !== undefined) {
-      this.size = options.size;
+    if (initOptions?.size !== undefined) {
+      this.size = initOptions.size;
     } else {
       this.size = this.DefaultInitialSize;
     }
 
-    if (data && data.length > this.size) {
-      this.size = data.length;
+    if (initData && initData?.length > this.size) {
+      this.size = initData.length;
     }
 
     if (this.size < 0 || this.size > constants.MAX_LENGTH) {
@@ -175,9 +178,9 @@ export class DynamicBuffer {
     }
 
     this.used = 0;
-    this.fillVal = options?.fill || 0;
-    this.encoding = options?.encoding || 'utf8';
-    this.factor = options?.factor || this.DefaultResizeFactor;
+    this.fillVal = initOptions?.fill || 0;
+    this.encoding = initOptions?.encoding || 'utf8';
+    this.factor = initOptions?.factor || this.DefaultResizeFactor;
 
     if (this.factor <= 0 || Number.isNaN(this.factor)) {
       throw new Error('Invalid factor');
@@ -187,8 +190,8 @@ export class DynamicBuffer {
       this.buffer = Buffer.alloc(this.size, this.fillVal, this.encoding);
     }
 
-    if (data) {
-      this.append(data);
+    if (initData) {
+      this.append(initData);
     }
 
     // eslint-disable-next-line no-constructor-return
