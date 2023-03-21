@@ -1568,7 +1568,7 @@ export class DynamicBuffer {
    *
    * @returns The string decodes from buffer
    */
-  toLocaleString() {
+  toLocaleString(): string {
     return this.toString();
   }
 
@@ -1797,7 +1797,7 @@ export class DynamicBuffer {
    * @param data Data to write to buffer.
    * @param offset The position to write data.
    */
-  private writeByte(data: any, offset: number) {
+  private writeByte(data: any, offset: number): void {
     this.ensureSize(offset + 1);
 
     // @ts-ignore
