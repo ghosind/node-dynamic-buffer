@@ -259,3 +259,151 @@ describe('Set tests', () => {
     });
   });
 });
+
+describe('More write methods test', () => {
+  const writeCompare = (func: (buf: DynamicBuffer) => any, expect: any) => {
+    const buf = new DynamicBuffer({ size: 0 });
+    func(buf);
+    assert.deepEqual(buf.toJSON().data, expect);
+  };
+
+  it('Test write BigInt', () => {
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeBigInt64BE(0x0102030405060708n),
+      [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeBigInt64LE(0x0102030405060708n),
+      [0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeBigUInt64BE(0x0102030405060708n),
+      [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeBigUInt64LE(0x0102030405060708n),
+      [0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01],
+    );
+  });
+
+  it('Test write double and float', () => {
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeFloatBE(2.387939260590663e-38),
+      [0x01, 0x02, 0x03, 0x04],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeFloatLE(1.539989614439558e-36),
+      [0x01, 0x02, 0x03, 0x04],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeDoubleBE(8.20788039913184e-304),
+      [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeDoubleLE(5.447603722011605e-270),
+      [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08],
+    );
+  });
+
+  it('Test write int', () => {
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeInt8(-2),
+      [0xfe],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeInt16BE(0x0102),
+      [0x01, 0x02],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeInt16LE(0x0102),
+      [0x02, 0x01],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeInt32BE(0x01020304),
+      [0x01, 0x02, 0x03, 0x04],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeInt32LE(0x01020304),
+      [0x04, 0x03, 0x02, 0x01],
+    );
+  });
+
+  it('Test write uint', () => {
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeUInt8(1),
+      [0x01],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeUInt16BE(0x0102),
+      [0x01, 0x02],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeUInt16LE(0x0102),
+      [0x02, 0x01],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeUInt32BE(0x01020304),
+      [0x01, 0x02, 0x03, 0x04],
+    );
+
+    writeCompare(
+      (buf: DynamicBuffer) => buf.writeUInt32LE(0x01020304),
+      [0x04, 0x03, 0x02, 0x01],
+    );
+  });
+
+  it('Test write with byte length', () => {
+    const v: number[] = [0x01, 0x0102, 0x010203, 0x01020304, 0x0102030405, 0x010203040506];
+    const be: number[][] = [
+      [0x01],
+      [0x01, 0x02],
+      [0x01, 0x02, 0x03],
+      [0x01, 0x02, 0x03, 0x04],
+      [0x01, 0x02, 0x03, 0x04, 0x05],
+      [0x01, 0x02, 0x03, 0x04, 0x05, 0x06],
+    ];
+    const le: number[][] = [
+      [0x01],
+      [0x02, 0x01],
+      [0x03, 0x02, 0x01],
+      [0x04, 0x03, 0x02, 0x01],
+      [0x05, 0x04, 0x03, 0x02, 0x01],
+      [0x06, 0x05, 0x04, 0x03, 0x02, 0x01],
+    ];
+
+    for (let i = 0; i < 6; i += 1) {
+      writeCompare(
+        (buf: DynamicBuffer) => buf.writeIntBE(v[i], 0, i + 1),
+        be[i],
+      );
+
+      writeCompare(
+        (buf: DynamicBuffer) => buf.writeIntLE(v[i], 0, i + 1),
+        le[i],
+      );
+
+      writeCompare(
+        (buf: DynamicBuffer) => buf.writeUIntBE(v[i], 0, i + 1),
+        be[i],
+      );
+
+      writeCompare(
+        (buf: DynamicBuffer) => buf.writeUIntLE(v[i], 0, i + 1),
+        le[i],
+      );
+    }
+  });
+});
