@@ -1676,6 +1676,498 @@ export class DynamicBuffer {
   }
 
   /**
+   * Writes a signed integer BigInt to the buffer at the specified offset as big-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeBigInt64BE(value: bigint, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 8 > this.size) {
+      this.ensureSize(offset + 8);
+    }
+
+    const ret = this.buffer?.writeBigInt64BE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a signed integer BigInt to the buffer at the specified offset as little-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeBigInt64LE(value: bigint, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 8 > this.size) {
+      this.ensureSize(offset + 8);
+    }
+
+    const ret = this.buffer?.writeBigInt64LE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes an unsigned integer BigInt to the buffer at the specified offset as big-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeBigUInt64BE(value: bigint, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 8 > this.size) {
+      this.ensureSize(offset + 8);
+    }
+
+    const ret = this.buffer?.writeBigUInt64BE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes an unsigned integer BigInt to the buffer at the specified offset as little-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeBigUInt64LE(value: bigint, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 8 > this.size) {
+      this.ensureSize(offset + 8);
+    }
+
+    const ret = this.buffer?.writeBigUInt64LE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a Javascript number to the buffer at the specified offset as big-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeDoubleBE(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 8 > this.size) {
+      this.ensureSize(offset + 8);
+    }
+
+    const ret = this.buffer?.writeDoubleBE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a Javascript number to the buffer at the specified offset as little-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeDoubleLE(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 8 > this.size) {
+      this.ensureSize(offset + 8);
+    }
+
+    const ret = this.buffer?.writeDoubleLE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a Javascript number to the buffer at the specified offset as big-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeFloatBE(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 4 > this.size) {
+      this.ensureSize(offset + 4);
+    }
+
+    const ret = this.buffer?.writeFloatBE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a Javascript number to the buffer at the specified offset as little-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeFloatLE(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 4 > this.size) {
+      this.ensureSize(offset + 4);
+    }
+
+    const ret = this.buffer?.writeFloatLE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a 8-bits signed integer to the buffer at the specified offset.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeInt8(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 1 > this.size) {
+      this.ensureSize(offset + 1);
+    }
+
+    const ret = this.buffer?.writeInt8(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a 16-bits signed integer to the buffer at the specified offset as big-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeInt16BE(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 2 > this.size) {
+      this.ensureSize(offset + 2);
+    }
+
+    const ret = this.buffer?.writeInt16BE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a 16-bits signed integer to the buffer at the specified offset as little-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeInt16LE(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 2 > this.size) {
+      this.ensureSize(offset + 2);
+    }
+
+    const ret = this.buffer?.writeInt16LE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a 32-bits signed integer to the buffer at the specified offset as big-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeInt32BE(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 4 > this.size) {
+      this.ensureSize(offset + 4);
+    }
+
+    const ret = this.buffer?.writeInt32BE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a 32-bits signed integer to the buffer at the specified offset as little-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeInt32LE(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 4 > this.size) {
+      this.ensureSize(offset + 4);
+    }
+
+    const ret = this.buffer?.writeInt32LE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes `byteLength` bytes to the buffer at the specified offset as a big-endian signed
+   * integer. Supports up to 48 bits of accuracy.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeIntBE(value: number, offset: number, byteLength: number): number {
+    checkRange('offset', offset, 0);
+    checkRange('byteLength', byteLength, 1, 6);
+
+    if (!this.buffer || offset + byteLength > this.size) {
+      this.ensureSize(offset + byteLength);
+    }
+
+    const ret = this.buffer?.writeIntBE(value, offset, byteLength) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes `byteLength` bytes to the buffer at the specified offset as a little-endian signed
+   * integer. Supports up to 48 bits of accuracy.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeIntLE(value: number, offset: number, byteLength: number): number {
+    checkRange('offset', offset, 0);
+    checkRange('byteLength', byteLength, 1, 6);
+
+    if (!this.buffer || offset + byteLength > this.size) {
+      this.ensureSize(offset + byteLength);
+    }
+
+    const ret = this.buffer?.writeIntLE(value, offset, byteLength) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a 8-bits unsigned integer to the buffer at the specified offset.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeUInt8(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 1 > this.size) {
+      this.ensureSize(offset + 1);
+    }
+
+    const ret = this.buffer?.writeUInt8(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a 16-bits unsigned integer to the buffer at the specified offset as big-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeUInt16BE(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 2 > this.size) {
+      this.ensureSize(offset + 2);
+    }
+
+    const ret = this.buffer?.writeUInt16BE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a 16-bits unsigned integer to the buffer at the specified offset as little-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeUInt16LE(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 2 > this.size) {
+      this.ensureSize(offset + 2);
+    }
+
+    const ret = this.buffer?.writeUInt16LE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a 32-bits unsigned integer to the buffer at the specified offset as big-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeUInt32BE(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 4 > this.size) {
+      this.ensureSize(offset + 4);
+    }
+
+    const ret = this.buffer?.writeUInt32BE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes a 32-bits unsigned integer to the buffer at the specified offset as little-endian.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeUInt32LE(value: number, offset: number = 0): number {
+    checkRange('offset', offset, 0);
+
+    if (!this.buffer || offset + 4 > this.size) {
+      this.ensureSize(offset + 4);
+    }
+
+    const ret = this.buffer?.writeUInt32LE(value, offset) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes `byteLength` bytes to the buffer at the specified offset as a big-endian unsigned
+   * integer. Supports up to 48 bits of accuracy.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeUIntBE(value: number, offset: number, byteLength: number): number {
+    checkRange('offset', offset, 0);
+    checkRange('byteLength', byteLength, 1, 6);
+
+    if (!this.buffer || offset + byteLength > this.size) {
+      this.ensureSize(offset + byteLength);
+    }
+
+    const ret = this.buffer?.writeUIntBE(value, offset, byteLength) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
+   * Writes `byteLength` bytes to the buffer at the specified offset as a little-endian unsigned
+   * integer. Supports up to 48 bits of accuracy.
+   *
+   * @param value The number to be written to buffer.
+   * @param offset The number of bytes to skip before starting to write, and it must greater than
+   * or equal to `0`. Default `0`.
+   * @returns `offset` plus the number of bytes written.
+   */
+  writeUIntLE(value: number, offset: number, byteLength: number): number {
+    checkRange('offset', offset, 0);
+    checkRange('byteLength', byteLength, 1, 6);
+
+    if (!this.buffer || offset + byteLength > this.size) {
+      this.ensureSize(offset + byteLength);
+    }
+
+    const ret = this.buffer?.writeUIntLE(value, offset, byteLength) || 0;
+
+    this.used = ret > this.used ? ret : this.used;
+
+    return ret;
+  }
+
+  /**
    * Calculate start and end offsets by optional parameters.
    *
    * @param start The start byte offset, default 0.
