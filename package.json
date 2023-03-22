@@ -1,6 +1,6 @@
 {
   "name": "dynamic-buffer",
-  "version": "0.3.3",
+  "version": "1.0.0",
   "description": "Dynamic storage size buffer object based on Node.js builtin Buffer",
   "scripts": {
     "prepublishOnly": "tsc",
