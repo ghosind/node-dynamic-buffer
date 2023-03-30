@@ -1665,9 +1665,7 @@ export class DynamicBuffer {
     length: number = data.length,
     encoding: BufferEncoding | undefined = this.encoding,
   ): number {
-    if (offset < 0) {
-      checkRange('offset', offset, 0);
-    }
+    checkRange('offset', offset, 0);
 
     const count = this.writeString(data, offset, length, encoding);
     this.used = offset + count;
