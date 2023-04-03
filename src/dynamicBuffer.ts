@@ -754,6 +754,50 @@ export class DynamicBuffer {
   }
 
   /**
+   * Prepends string to this buffer according to the character encoding.
+   *
+   * ```js
+   * const buf = new DynamicBuffer('world!');
+   * buf.prepend('Hello ');
+   * console.log(buf.toString());
+   * // Hello world!
+   * ```
+   *
+   * @param data String to write to buffer.
+   * @param length Maximum number of bytes to write, default the length of string.
+   * @param encoding The character encoding to use, default from buffer encoding.
+   * @returns The number of bytes written.
+   */
+  prepend(
+    data: string,
+    length?: number,
+    encoding?: BufferEncoding,
+  ): number {
+    if (typeof data !== 'string') {
+      throw new TypeError('argument must be a string');
+    }
+
+    let lengthToWrite = data.length || 0;
+    if (length !== undefined && length >= 0 && length <= data.length) {
+      lengthToWrite = length;
+    }
+
+    if (lengthToWrite === 0) {
+      return 0;
+    }
+
+    this.ensureSize(lengthToWrite + this.used);
+
+    this.buffer?.copy(this.buffer, lengthToWrite, 0, this.used);
+
+    this.writeString(data, 0, lengthToWrite, encoding);
+
+    this.used += lengthToWrite;
+
+    return lengthToWrite;
+  }
+
+  /**
    * Reads and returns a byte at the position `offset` in this buffer.
    *
    * ```js
