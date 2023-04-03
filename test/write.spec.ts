@@ -111,6 +111,98 @@ describe('Append tests', () => {
   });
 });
 
+describe('Prepend tests', () => {
+  it('Test prepending string', () => {
+    const buffer = new DynamicBuffer();
+    const str = 'Hello world';
+
+    const count = buffer.prepend(str);
+
+    assert.equal(count, str.length);
+    assert.equal(buffer.toString(), str);
+  });
+
+  it('Test prepending string twice time', () => {
+    const buffer = new DynamicBuffer({ size: 32 });
+    let str = ' world';
+    let count = buffer.prepend(str);
+    assert.equal(count, str.length);
+    assert.equal(buffer.toString(), str);
+
+    str = 'Hello';
+    count = buffer.prepend(str);
+    assert.equal(count, str.length);
+    assert.equal(buffer.toString(), 'Hello world');
+    assert.equal(buffer.length, 'Hello world'.length);
+  });
+
+  it('Test prepending empty string', () => {
+    const buffer = new DynamicBuffer();
+
+    const count = buffer.prepend('');
+
+    assert.equal(count, 0);
+    assert.equal(buffer.toString(), '');
+  });
+
+  it('Test prepending without parameter', () => {
+    const buffer = new DynamicBuffer();
+
+    assert.throws(() => {
+      // @ts-ignore
+      buffer.prepend();
+    });
+  });
+
+  it('Test prepending null', () => {
+    const buffer = new DynamicBuffer();
+
+    assert.throws(() => {
+      // @ts-ignore
+      buffer.prepend(null);
+    });
+  });
+
+  it('Test prepending a number', () => {
+    const buffer = new DynamicBuffer();
+
+    assert.throws(() => {
+      // @ts-ignore
+      buffer.prepend(65);
+    });
+  });
+
+  it('Test prepending string with small length', () => {
+    const buffer = new DynamicBuffer(' world');
+
+    const count = buffer.prepend('Hello!!!!', 5, 'utf8');
+
+    assert.equal(count, 5);
+    assert.equal(buffer.toString(), 'Hello world');
+  });
+
+  it('Test prepending string with large length', () => {
+    const buffer = new DynamicBuffer(' world');
+    const str = 'Hello';
+
+    const count = buffer.prepend(str, 16, 'utf-8');
+
+    assert.equal(count, str.length);
+    assert.equal(buffer.toString(), 'Hello world');
+  });
+
+  it('Test prepending string to zero size buffer', () => {
+    const buffer = new DynamicBuffer({ size: 0 });
+    const str = 'Hello world';
+
+    const count = buffer.prepend(str);
+
+    assert.equal(count, str.length);
+    assert.equal(Reflect.get(buffer, 'size'), str.length);
+    assert.equal(buffer.toBuffer().toString(), str);
+  });
+});
+
 describe('Write tests', () => {
   it('Test writing string without offset', () => {
     const buffer = new DynamicBuffer();
