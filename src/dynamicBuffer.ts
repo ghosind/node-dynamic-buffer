@@ -258,7 +258,7 @@ export class DynamicBuffer {
     length?: number,
     encoding?: BufferEncoding,
   ): number {
-    const count = this.writeString(data, this.used, length, encoding);
+    const count = this.writeData(data, this.used, length, encoding);
     this.used += count;
 
     return count;
@@ -790,7 +790,7 @@ export class DynamicBuffer {
 
     this.buffer?.copy(this.buffer, lengthToWrite, 0, this.used);
 
-    this.writeString(data, 0, lengthToWrite, encoding);
+    this.writeData(data, 0, lengthToWrite, encoding);
 
     this.used += lengthToWrite;
 
@@ -1711,7 +1711,7 @@ export class DynamicBuffer {
   ): number {
     checkRange('offset', offset, 0);
 
-    const count = this.writeString(data, offset, length, encoding);
+    const count = this.writeData(data, offset, length, encoding);
     this.used = offset + count;
 
     return count;
@@ -2343,22 +2343,24 @@ export class DynamicBuffer {
   }
 
   /**
-   * Write a string into internal buffer with the specified offset.
+   * Write data into internal buffer with the specified offset, and the type of data should be one
+   * of string, Buffer, or Uint8Array.
    *
-   * @param data String to write to buffer.
+   * @param data Data to write to buffer.
    * @param offset Number of bytes to skip before starting to write data.
-   * @param length Maximum number of bytes to write, default the length of string.
-   * @param encoding The character encoding to use, default from buffer encoding.
+   * @param length Maximum number of bytes to write, default the length of the data.
+   * @param encoding The character encoding to use if the data is a string, default from buffer
+   * encoding.
    * @returns Number of bytes written.
    */
-  private writeString(
-    data: string,
+  private writeData(
+    data: string | Buffer | Int8Array,
     offset: number,
     length?: number,
     encoding?: BufferEncoding,
-  ): number {
-    if (typeof data !== 'string') {
-      throw new TypeError('argument must be a string');
+  ) {
+    if (typeof data !== 'string' && !(data instanceof Buffer) && !(data instanceof Uint8Array)) {
+      throw new TypeError('argument must be a string, Buffer, or a Int8Array');
     }
 
     let lengthToWrite = data.length || 0;
@@ -2372,7 +2374,13 @@ export class DynamicBuffer {
 
     this.ensureSize(lengthToWrite + offset);
 
-    const count = this.buffer?.write(data, offset, lengthToWrite, encoding || this.encoding);
+    let count: number | undefined = 0;
+    if (typeof data === 'string') {
+      count = this.buffer?.write(data, offset, lengthToWrite, encoding || this.encoding);
+    } else if (this.buffer) {
+      data.copy(this.buffer, offset, 0, length);
+      count = length;
+    }
 
     return count || 0;
   }
