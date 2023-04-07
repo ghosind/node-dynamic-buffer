@@ -2344,7 +2344,7 @@ export class DynamicBuffer {
 
   /**
    * Write data into internal buffer with the specified offset, and the type of data should be one
-   * of string, Buffer, or Uint8Array.
+   * of string or Buffer.
    *
    * @param data Data to write to buffer.
    * @param offset Number of bytes to skip before starting to write data.
@@ -2354,13 +2354,13 @@ export class DynamicBuffer {
    * @returns Number of bytes written.
    */
   private writeData(
-    data: string | Buffer | Int8Array,
+    data: string | Buffer,
     offset: number,
     length?: number,
     encoding?: BufferEncoding,
   ) {
-    if (typeof data !== 'string' && !(data instanceof Buffer) && !(data instanceof Uint8Array)) {
-      throw new TypeError('argument must be a string, Buffer, or a Int8Array');
+    if (typeof data !== 'string' && !(data instanceof Buffer)) {
+      throw new TypeError('argument must be a string, or a Buffer');
     }
 
     let lengthToWrite = data.length || 0;
