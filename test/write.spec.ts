@@ -30,6 +30,16 @@ describe('Append tests', () => {
     assert.equal(buffer.toString(), str);
   });
 
+  it('Test appending a Buffer', () => {
+    const buffer = new DynamicBuffer('Hello');
+    const buf = Buffer.from(' world');
+
+    const count = buffer.append(buf);
+
+    assert.equal(count, buf.length);
+    assert.equal(buffer.toString(), 'Hello world');
+  });
+
   it('Test appending string twice time', () => {
     const buffer = new DynamicBuffer({ size: 32 });
     let str = 'Hello';
@@ -122,6 +132,16 @@ describe('Prepend tests', () => {
     assert.equal(buffer.toString(), str);
   });
 
+  it('Test prepending a Buffer', () => {
+    const buffer = new DynamicBuffer(' world');
+    const buf = Buffer.from('Hello');
+
+    const count = buffer.prepend(buf);
+
+    assert.equal(count, buf.length);
+    assert.equal(buffer.toString(), 'Hello world');
+  });
+
   it('Test prepending string twice time', () => {
     const buffer = new DynamicBuffer({ size: 32 });
     let str = ' world';
@@ -212,6 +232,16 @@ describe('Write tests', () => {
 
     assert.equal(count, str.length);
     assert.equal(buffer.toString(), str);
+  });
+
+  it('Test writing Buffer without offset', () => {
+    const buffer = new DynamicBuffer();
+    const buf = Buffer.from('Hello world');
+
+    const count = buffer.write(buf);
+
+    assert.equal(count, buf.length);
+    assert.equal(buffer.toString(), buf.toString());
   });
 
   it('Test writing string with offset', () => {
