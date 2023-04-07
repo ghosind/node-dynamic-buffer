@@ -2378,8 +2378,8 @@ export class DynamicBuffer {
     if (typeof data === 'string') {
       count = this.buffer?.write(data, offset, lengthToWrite, encoding || this.encoding);
     } else if (this.buffer) {
-      data.copy(this.buffer, offset, 0, length);
-      count = length;
+      data.copy(this.buffer, offset, 0, lengthToWrite);
+      count = lengthToWrite;
     }
 
     return count || 0;
