@@ -254,7 +254,7 @@ export class DynamicBuffer {
    * @returns The number of bytes written.
    */
   append(
-    data: string,
+    data: string | Buffer,
     length?: number,
     encoding?: BufferEncoding,
   ): number {
@@ -769,12 +769,12 @@ export class DynamicBuffer {
    * @returns The number of bytes written.
    */
   prepend(
-    data: string,
+    data: string | Buffer,
     length?: number,
     encoding?: BufferEncoding,
   ): number {
-    if (typeof data !== 'string') {
-      throw new TypeError('argument must be a string');
+    if (typeof data !== 'string' && !(data instanceof Buffer)) {
+      throw new TypeError('argument must be a string or a Buffer');
     }
 
     let lengthToWrite = data.length || 0;
@@ -1704,7 +1704,7 @@ export class DynamicBuffer {
    * @returns Number of bytes written.
    */
   write(
-    data: string,
+    data: string | Buffer,
     offset: number = 0,
     length: number = data.length,
     encoding: BufferEncoding | undefined = this.encoding,
