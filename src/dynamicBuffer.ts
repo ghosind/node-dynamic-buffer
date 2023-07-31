@@ -319,12 +319,12 @@ export class DynamicBuffer {
    * buffer when sorted; `-1` if `target` should come after this buffer when sorted.
    */
   compare(
-    target: DynamicBuffer | Buffer | Uint8Array,
+    target: this | Buffer | Uint8Array,
     targetStart: number = 0,
     targetEnd: number = target.length,
     sourceStart: number = 0,
     sourceEnd: number = this.length,
-  ): number {
+  ): 0 | 1 | -1 {
     const otherBuf = target instanceof DynamicBuffer ? (target.buffer || ([] as number[])) : target;
     const thisBuf = this.buffer || ([] as number[]);
 
@@ -394,7 +394,7 @@ export class DynamicBuffer {
    * is treated as length+end.
    * @param end If not specified, length of the this object is used as its default value.
    */
-  copyWithin(target: number, start: number, end: number = this.length): DynamicBuffer {
+  copyWithin(target: number, start: number, end: number = this.length): this {
     if (!this.buffer || this.length === 0) {
       return this;
     }
@@ -463,7 +463,7 @@ export class DynamicBuffer {
    * to compare this buffer.
    * @returns `true` if two buffers have exactly the same bytes, `false` otherwise.
    */
-  equals(otherBuffer: DynamicBuffer | Buffer | Uint8Array): boolean {
+  equals(otherBuffer: this | Buffer | Uint8Array): boolean {
     return this.compare(otherBuffer, 0, otherBuffer.length, 0, this.length) === 0;
   }
 
@@ -509,7 +509,7 @@ export class DynamicBuffer {
     offset: number = 0,
     end: number = this.length,
     encoding: BufferEncoding = 'utf8',
-  ): DynamicBuffer {
+  ): this {
     if (!this.buffer || this.length === 0 || end - offset <= 0) {
       return this;
     }
@@ -824,7 +824,7 @@ export class DynamicBuffer {
    * `buf.length - 8`, default `0`.
    * @returns Integer read from the buffer at the specified offset.
    */
-  readBigInt64BE(offset: number = 0): BigInt {
+  readBigInt64BE(offset: number = 0): bigint {
     if (!this.buffer || this.length < 8) {
       throw new RangeError('Attempt to access memory outside buffer bounds');
     }
@@ -841,7 +841,7 @@ export class DynamicBuffer {
    * `buf.length - 8`, default `0`.
    * @returns Integer read from the buffer at the specified offset.
    */
-  readBigInt64LE(offset: number = 0): BigInt {
+  readBigInt64LE(offset: number = 0): bigint {
     if (!this.buffer || this.length < 8) {
       throw new RangeError('Attempt to access memory outside buffer bounds');
     }
@@ -858,7 +858,7 @@ export class DynamicBuffer {
    * `buf.length - 8`, default `0`.
    * @returns Integer read from the buffer at the specified offset.
    */
-  readBigUInt64BE(offset: number = 0): BigInt {
+  readBigUInt64BE(offset: number = 0): bigint {
     if (!this.buffer || this.length < 8) {
       throw new RangeError('Attempt to access memory outside buffer bounds');
     }
@@ -875,7 +875,7 @@ export class DynamicBuffer {
    * `buf.length - 8`, default `0`.
    * @returns Integer read from the buffer at the specified offset.
    */
-  readBigUInt64LE(offset: number = 0): BigInt {
+  readBigUInt64LE(offset: number = 0): bigint {
     if (!this.buffer || this.length < 8) {
       throw new RangeError('Attempt to access memory outside buffer bounds');
     }
@@ -1343,7 +1343,7 @@ export class DynamicBuffer {
    *
    * @returns The reference to this buffer.
    */
-  reverse(): DynamicBuffer {
+  reverse(): this {
     if (!this.buffer || this.length === 0) {
       return this;
     }
@@ -1453,7 +1453,7 @@ export class DynamicBuffer {
    *
    * @returns A reference to this buffer.
    */
-  swap16(): DynamicBuffer {
+  swap16(): this {
     if (this.length % 2 !== 0) {
       throw new RangeError('Buffer size must be a multiple of 2');
     }
@@ -1485,7 +1485,7 @@ export class DynamicBuffer {
    *
    * @returns A reference to this buffer.
    */
-  swap32(): DynamicBuffer {
+  swap32(): this {
     if (this.length % 4 !== 0) {
       throw new RangeError('Buffer size must be a multiple of 4');
     }
@@ -1518,7 +1518,7 @@ export class DynamicBuffer {
    *
    * @returns A reference to this buffer.
    */
-  swap64(): DynamicBuffer {
+  swap64(): this {
     if (this.length % 8 !== 0) {
       throw new RangeError('Buffer size must be a multiple of 8');
     }
@@ -1580,7 +1580,7 @@ export class DynamicBuffer {
    * // {"type":"Buffer","data":[72,101,108,108,111]}
    * ```
    */
-  toJSON(): { type: string, data: number[] } {
+  toJSON(): { type: 'Buffer', data: number[] } {
     const data: number[] = [];
 
     if (this.buffer && this.used > 0) {
